@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import { validate, leadSchema } from '../../lib/validation.js'
-import { sendLeadMail } from '../../lib/mailer.js'
+import { validate, leadSchema } from '../lib/validation.js'
+import { sendLeadMail } from '../lib/mailer.js'
 import { asyncHandler } from '../middleware/errors.js'
 
 const router = Router()

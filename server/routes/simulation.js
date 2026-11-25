@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import { calculateMaxMonthly, maxAffordablePrice } from '../../lib/helpers.js'
-import { simulationSchema, validate } from '../../lib/validation.js'
+import { calculateMaxMonthly, maxAffordablePrice } from '../lib/helpers.js'
+import { simulationSchema, validate } from '../lib/validation.js'
 import { listVehicles } from '../lib/vehicles.js'
 import { asyncHandler } from '../middleware/errors.js'
 

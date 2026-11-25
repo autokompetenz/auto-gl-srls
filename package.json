@@ -10,7 +10,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1 --port 5221 --strictPort",
-    "api": "node api/server.js",
+    "api": "node server/index.js",
     "dev:full": "concurrently -k -n api,web -c cyan,magenta \"pnpm:api\" \"pnpm:dev\"",
     "build": "tsc -b && vite build",
     "preview": "vite preview --host 127.0.0.1 --port 5221 --strictPort",

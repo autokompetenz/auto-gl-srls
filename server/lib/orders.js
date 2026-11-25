@@ -1,13 +1,13 @@
 import { randomBytes } from 'node:crypto'
-import { prisma } from '../../lib/prisma.js'
+import { prisma } from './prisma.js'
 import {
   FINANCING,
   HttpError,
   addMonths,
   monthlyPaymentForAmount,
   toIso,
-} from '../../lib/helpers.js'
-import { sendOrderNotification } from '../../lib/mailer.js'
+} from './helpers.js'
+import { sendOrderNotification } from './mailer.js'
 import { getStoredBank, toBankDTO } from './bank.js'
 import { toVehicleDTO } from './vehicles.js'
 

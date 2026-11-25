@@ -1,5 +1,5 @@
-import { prisma } from '../../lib/prisma.js'
-import { HttpError } from '../../lib/helpers.js'
+import { prisma } from '../lib/prisma.js'
+import { HttpError } from '../lib/helpers.js'
 import { verifyToken } from '../lib/auth.js'
 
 function readBearer(req) {

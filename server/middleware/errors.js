@@ -1,4 +1,4 @@
-import { HttpError } from '../../lib/helpers.js'
+import { HttpError } from '../lib/helpers.js'
 
 /** Enveloppe les handlers async afin que les rejets atteignent le middleware d'erreur. */
 export function asyncHandler(handler) {

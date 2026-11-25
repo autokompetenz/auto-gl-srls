@@ -1,7 +1,7 @@
 import { randomBytes } from 'node:crypto'
-import { prisma } from '../../lib/prisma.js'
-import { HttpError, toIso } from '../../lib/helpers.js'
-import { sendAlertNotification } from '../../lib/mailer.js'
+import { prisma } from './prisma.js'
+import { HttpError, toIso } from './helpers.js'
+import { sendAlertNotification } from './mailer.js'
 import { buildVehicleWhere } from './vehicles.js'
 
 export const MAX_ALERTS_PER_EMAIL = 20

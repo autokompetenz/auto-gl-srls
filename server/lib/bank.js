@@ -1,4 +1,4 @@
-import { prisma } from '../../lib/prisma.js'
+import { prisma } from './prisma.js'
 
 /**
  * Coordonnées bancaires actives : exclusivement saisies dans l'espace admin

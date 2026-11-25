@@ -8,8 +8,8 @@ import {
   monthlyPaymentForAmount,
   slugify,
 } from '../lib/helpers.js'
-import { calculateOrderTotals, generateOrderNumber } from '../api/lib/orders.js'
-import { normalizeAlertFilters } from '../api/lib/alerts.js'
+import { calculateOrderTotals, generateOrderNumber } from '../server/lib/orders.js'
+import { normalizeAlertFilters } from '../server/lib/alerts.js'
 
 test('order number uses the AUTO GL AGL-YYYYMMDD-XXXXXX format', () => {
   const date = new Date('2026-11-24T12:00:00.000Z')

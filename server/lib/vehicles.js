@@ -1,6 +1,6 @@
 import { randomBytes } from 'node:crypto'
-import { prisma } from '../../lib/prisma.js'
-import { HttpError, normalizeArray, slugify } from '../../lib/helpers.js'
+import { prisma } from './prisma.js'
+import { HttpError, normalizeArray, slugify } from './helpers.js'
 
 const NO_WARRANTY = ['', '-', 'aucune', 'aucun', 'non', '0 mois', 'sans garantie']
 

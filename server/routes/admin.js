@@ -1,8 +1,8 @@
 import { randomBytes } from 'node:crypto'
 import { Router } from 'express'
 import multer from 'multer'
-import { prisma } from '../../lib/prisma.js'
-import { HttpError, slugify } from '../../lib/helpers.js'
+import { prisma } from '../lib/prisma.js'
+import { HttpError, slugify } from '../lib/helpers.js'
 import {
   adminLoginSchema,
   adminOrderPatchSchema,
@@ -11,8 +11,8 @@ import {
   carUpdateSchema,
   paymentPatchSchema,
   validate,
-} from '../../lib/validation.js'
-import { deleteImage, getUploadSignature, isCloudinaryConfigured, uploadImage } from '../../lib/cloudinary.js'
+} from '../lib/validation.js'
+import { deleteImage, getUploadSignature, isCloudinaryConfigured, uploadImage } from '../lib/cloudinary.js'
 import { comparePassword, publicUser, signToken, verifyAdminCode } from '../lib/auth.js'
 import { notifyAlerts } from '../lib/alerts.js'
 import { getStoredBank, saveBank } from '../lib/bank.js'

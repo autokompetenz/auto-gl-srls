@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { HttpError } from '../../lib/helpers.js'
+import { HttpError } from './helpers.js'
 
 export async function hashPassword(password) {
   return bcrypt.hash(password, 12)

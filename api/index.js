@@ -3,17 +3,19 @@ import cors from 'cors'
 import express from 'express'
 import helmet from 'helmet'
 
-import adminRouter from './routes/admin.js'
-import alertsRouter from './routes/alerts.js'
-import authRouter from './routes/auth.js'
-import bankRouter from './routes/bank.js'
-import carsRouter from './routes/cars.js'
-import favoritesRouter from './routes/favorites.js'
-import healthRouter from './routes/health.js'
-import leadsRouter from './routes/leads.js'
-import ordersRouter from './routes/orders.js'
-import simulationRouter from './routes/simulation.js'
-import { errorHandler, notFound } from './middleware/errors.js'
+// Les routeurs sont hors de /api pour que Vercel ne génère qu'une seule
+// Serverless Function (api/index.js) : le plan Hobby est limité à 12 functions.
+import adminRouter from '../server/routes/admin.js'
+import alertsRouter from '../server/routes/alerts.js'
+import authRouter from '../server/routes/auth.js'
+import bankRouter from '../server/routes/bank.js'
+import carsRouter from '../server/routes/cars.js'
+import favoritesRouter from '../server/routes/favorites.js'
+import healthRouter from '../server/routes/health.js'
+import leadsRouter from '../server/routes/leads.js'
+import ordersRouter from '../server/routes/orders.js'
+import simulationRouter from '../server/routes/simulation.js'
+import { errorHandler, notFound } from '../server/middleware/errors.js'
 
 const app = express()
 

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 
-import { toVehicleDTO } from '../api/lib/vehicles.js'
+import { toVehicleDTO } from '../server/lib/vehicles.js'
 
 const baseCar = {
   id: 'multi-images-2024',

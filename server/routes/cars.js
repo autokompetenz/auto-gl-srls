@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { carQuerySchema, validate } from '../../lib/validation.js'
+import { carQuerySchema, validate } from '../lib/validation.js'
 import { getVehicleDTOById, listVehicles } from '../lib/vehicles.js'
 import { asyncHandler } from '../middleware/errors.js'
 

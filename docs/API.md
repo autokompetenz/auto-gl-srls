@@ -2,7 +2,7 @@
 
 Backend Express 4 + Prisma 5 + PostgreSQL. Toutes les routes sont préfixées par `/api`.
 Aucun serveur n'est démarré par l'import de `api/index.js` : celui-ci exporte l'application,
-`api/server.js` s'occupe de l'écoute.
+`server/index.js` s'occupe de l'écoute.
 
 ## 1. Installation et démarrage
 
