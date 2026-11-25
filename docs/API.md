@@ -122,7 +122,7 @@ toutes les annonces actives.
 
 | Méthode | Route | Auth | Réponse |
 | --- | --- | --- | --- |
-| POST | `/api/orders` | Bearer optionnel (invité autorisé) | `{order:OrderDTO}` — 201 |
+| POST | `/api/orders` | Bearer optionnel (invité autorisé) | `{order:OrderDTO, emails:{customer,admin}}` — 201 |
 | POST | `/api/orders/track` | — | `OrderDTO` (exige `orderNumber` **et** `email`) |
 | GET | `/api/orders/my` | Bearer | `OrderDTO[]` |
 | GET | `/api/orders/:id` | Bearer, propriétaire ou admin | `OrderDTO` |
@@ -234,9 +234,15 @@ Corps PATCH : `{status:'PENDING'|'COMPLETED'|'FAILED', paidAt?}`.
 `PATCH /admin/orders/:id` accepte `{status?,note?,bankInfo?}` avec
 `bankInfo = {beneficiary?,iban?,bic?,transferType?}`. L'ordre actuel est lu **avant**
 la construction de l'objet de mise à jour ; chaque champ est replié avec
-`valeur ?? currentOrder.champ ?? null`. Un e-mail de notification n'est envoyé que
+`valeur ?? currentOrder.champ ?? null`. Un e-mail au client n'est envoyé que
 si le statut a changé ou si une note est fournie (et seulement si SMTP est configuré).
 Une note crée une entrée de suivi.
+
+À la création (`POST /api/orders`), deux e-mails sont envoyés et **awaités** avant
+la réponse : une confirmation au client (`customerEmail`) et une notification à
+l'équipe (`LEADS_EMAIL`, puis `ADMIN_EMAIL`, puis `FROM_EMAIL`). Le champ `emails`
+de la réponse indique quels envois ont été acceptés par le serveur SMTP. Une panne
+SMTP est journalisée et ne fait jamais échouer la création de la commande.
 
 Les champs d'une annonce admin : `id?`, `name`, `version`, `year`, `mileage`, `price`,
 `color`, `image`, `gallery[]`, `wheels`, `location`, `warranty`, `gearbox`, `badges[]`,
