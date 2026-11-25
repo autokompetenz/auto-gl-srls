@@ -3,16 +3,26 @@ import { ArrowLeft, Check, Heart, MapPin, ShieldCheck } from 'lucide-react'
 import ContactForm from '../components/ContactForm'
 import VehicleCard from '../components/VehicleCard'
 import VehicleDescription from '../components/VehicleDescription'
-import { vehicleById, vehicles } from '../data/vehicles'
+import { useVehicles } from '../context/VehiclesContext'
 import type { Compare } from '../hooks/useCompare'
 import type { Favorites } from '../hooks/useFavorites'
 import { formatEuro, formatKm } from '../lib/format'
 
 export default function VehicleDetail({ id, favorites, compare }: { id: string; favorites: Favorites; compare: Compare }) {
+  const { vehicles, vehicleById, loading } = useVehicles()
   const [activeImage, setActiveImage] = useState(0)
   const vehicle = vehicleById(id)
 
   useEffect(() => setActiveImage(0), [id])
+
+  if (!vehicle && loading) {
+    return (
+      <div className="page shell empty-state">
+        <p className="eyebrow">Chargement</p>
+        <h1>Chargement du véhicule…</h1>
+      </div>
+    )
+  }
 
   if (!vehicle) {
     return (

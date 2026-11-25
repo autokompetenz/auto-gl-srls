@@ -1,11 +1,11 @@
 import { ArrowRight, Trash2 } from 'lucide-react'
-import { vehicleById } from '../data/vehicles'
-import type { Vehicle } from '../data/vehicles'
+import { useVehicles } from '../context/VehiclesContext'
 import type { Compare as CompareHook } from '../hooks/useCompare'
 import { estimateMonthly } from '../lib/finance'
 import { formatEuro, formatKm } from '../lib/format'
+import type { VehicleDTO } from '../types/features'
 
-type Row = { label: string; value: (vehicle: Vehicle) => string }
+type Row = { label: string; value: (vehicle: VehicleDTO) => string }
 
 const rows: Row[] = [
   { label: 'Prix', value: vehicle => formatEuro(vehicle.price) },
@@ -21,7 +21,8 @@ const rows: Row[] = [
 ]
 
 export default function Compare({ compare }: { compare: CompareHook }) {
-  const selected = compare.ids.map(vehicleById).filter((vehicle): vehicle is Vehicle => Boolean(vehicle))
+  const { vehicleById } = useVehicles()
+  const selected = compare.ids.map(vehicleById).filter((vehicle): vehicle is VehicleDTO => Boolean(vehicle))
 
   return (
     <div className="page shell compare-page">

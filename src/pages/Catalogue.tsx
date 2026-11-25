@@ -1,8 +1,8 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { BellPlus, RotateCcw, Search, SlidersHorizontal } from 'lucide-react'
 import AlertModal from '../components/AlertModal'
 import VehicleCard from '../components/VehicleCard'
-import { colors, maxMileage, maxPrice, vehicles, wheelOptions, years } from '../data/vehicles'
+import { useVehicles } from '../context/VehiclesContext'
 import type { Compare } from '../hooks/useCompare'
 import type { Favorites } from '../hooks/useFavorites'
 import { formatEuro, formatKm } from '../lib/format'
@@ -16,6 +16,16 @@ const sortOptions = [
 ] as const
 
 export default function Catalogue({ favorites, compare }: { favorites: Favorites; compare: Compare }) {
+  const { vehicles, source } = useVehicles()
+  const facets = useMemo(() => ({
+    colors: [...new Set(vehicles.map(vehicle => vehicle.color))].sort((a, b) => a.localeCompare(b, 'fr')),
+    wheelOptions: [...new Set(vehicles.map(vehicle => vehicle.wheels))].sort((a, b) => a.localeCompare(b, 'fr')),
+    years: [...new Set(vehicles.map(vehicle => vehicle.year))].sort((a, b) => a - b),
+    maxPrice: Math.max(0, ...vehicles.map(vehicle => vehicle.price)),
+    maxMileage: Math.max(0, ...vehicles.map(vehicle => vehicle.mileage)),
+  }), [vehicles])
+  const { colors, wheelOptions, years, maxPrice, maxMileage } = facets
+
   const [alertOpen, setAlertOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [color, setColor] = useState('all')
@@ -25,6 +35,13 @@ export default function Catalogue({ favorites, compare }: { favorites: Favorites
   const [mileageLimit, setMileageLimit] = useState(maxMileage)
   const [warrantyOnly, setWarrantyOnly] = useState(false)
   const [sort, setSort] = useState<(typeof sortOptions)[number]['value']>('price-asc')
+
+  // Quand la source change (API puis repli, ou inversement), les bornes des
+  // curseurs doivent suivre la sélection réellement disponible.
+  useEffect(() => {
+    setPriceLimit(maxPrice)
+    setMileageLimit(maxMileage)
+  }, [maxPrice, maxMileage, source])
 
   const results = useMemo(() => {
     const needle = query.trim().toLocaleLowerCase('fr')
@@ -44,7 +61,7 @@ export default function Catalogue({ favorites, compare }: { favorites: Favorites
       if (sort === 'year-desc') return b.year - a.year || a.price - b.price
       return a.price - b.price
     })
-  }, [query, color, wheels, year, priceLimit, mileageLimit, warrantyOnly, sort])
+  }, [vehicles, query, color, wheels, year, priceLimit, mileageLimit, warrantyOnly, sort])
 
   const alertFilters: AlertFilters = useMemo(() => ({
     search: query.trim() || undefined,

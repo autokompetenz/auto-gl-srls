@@ -328,3 +328,9 @@ corps des requêtes et garde `CLOUDINARY_API_SECRET` côté serveur. Les variabl
 `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `FROM_EMAIL`, `FROM_NAME`,
 `LEADS_EMAIL`, `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY` et
 `CLOUDINARY_API_SECRET`. `PORT` reste local et n'est pas nécessaire.
+
+Le catalogue public (accueil, catalogue, fiches, favoris, comparateur, commande)
+consomme `GET /api/cars?limit=100&sort=featured` via `VehiclesProvider`. La liste
+locale `src/data/vehicles.ts` n'est plus qu'un repli hors ligne. Un ajout, une
+modification ou une suppression dans l'admin rafraîchit immédiatement ce
+provider, et un changement de hash le recharge également.

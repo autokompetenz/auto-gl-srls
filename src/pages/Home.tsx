@@ -1,6 +1,6 @@
 import { ArrowRight, ShieldCheck, ClipboardCheck, CalendarCheck } from 'lucide-react'
 import VehicleCard from '../components/VehicleCard'
-import { vehicles } from '../data/vehicles'
+import { useVehicles } from '../context/VehiclesContext'
 import type { Compare } from '../hooks/useCompare'
 import type { Favorites } from '../hooks/useFavorites'
 
@@ -11,6 +11,7 @@ const steps = [
 ]
 
 export default function Home({ favorites, compare }: { favorites: Favorites; compare: Compare }) {
+  const { vehicles } = useVehicles()
   const featured = vehicles.slice(0, 3)
 
   return (

@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react'
-import { vehicleById } from '../data/vehicles'
 
 const STORAGE_KEY = 'auto-gl-srls:favorites'
 
@@ -7,7 +6,7 @@ function read(): string[] {
   try {
     const parsed: unknown = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '[]')
     if (!Array.isArray(parsed)) return []
-    return parsed.filter((id): id is string => typeof id === 'string' && Boolean(vehicleById(id)))
+    return parsed.filter((id): id is string => typeof id === 'string' && Boolean(id))
   } catch {
     return []
   }

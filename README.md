@@ -21,10 +21,10 @@ Avec Neon, utiliser l'**endpoint direct** (host sans `-pooler`) pour `DATABASE_U
 
 ## Fonctionnalités
 
-### Catalogue local
+### Catalogue public
 
 - Accueil avec sélection de véhicules et présentation du parcours.
-- Catalogue avec recherche, filtres (couleur, jantes, année, prix, kilométrage, garantie) et tri.
+- Catalogue avec recherche, filtres (couleur, jantes, année, prix, kilométrage, garantie) et tri. L'accueil, le catalogue, les fiches, le comparateur, les favoris et la commande lisent `GET /api/cars` : les véhicules ajoutés dans l'admin apparaissent immédiatement. Les 8 véhicules de `src/data/vehicles.ts` servent uniquement de repli si l'API est indisponible, et la liste est rechargée à chaque navigation.
 - Fiche véhicule : galerie navigable avec plusieurs images par véhicule, description structurée en paragraphes et listes, caractéristiques, équipements, vues techniques, demande d'essai et commande. Une annonce avec une seule image reste affichable.
 - Favoris et comparateur (3 véhicules maximum, ancien retiré automatiquement) persistés dans `localStorage` (`auto-gl-srls:favorites` et `auto-gl-srls:compare`). Ces deux listes restent **locales au navigateur** et ne passent pas par l'API.
 - Navigation par hash : `#/`, `#/catalogue`, `#/vehicule/...`, `#/favoris`, `#/comparateur`, `#/simulation`, `#/suivi[/:commande]`, `#/commande-confirmee/:commande`, `#/mes-commandes`, `#/commander/:id`, `#/connexion`, `#/alerte/:token`, `#/admin[/...]`, `#/contact`, `#/mentions-legales`.

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { ArrowLeft, ShieldCheck } from 'lucide-react'
-import { vehicleById } from '../data/vehicles'
+import { useVehicles } from '../context/VehiclesContext'
 import type { Navigate } from '../hooks/useRoute'
 import { apiFetch, errorMessage } from '../lib/api'
 import { formatEuro } from '../lib/format'
@@ -35,6 +35,7 @@ const initialValues: FormValues = {
 }
 
 export default function Commander({ id, navigate }: { id: string; navigate: Navigate }) {
+  const { vehicleById, loading } = useVehicles()
   const [values, setValues] = useState<FormValues>(initialValues)
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
   const [error, setError] = useState('')
@@ -84,6 +85,15 @@ export default function Commander({ id, navigate }: { id: string; navigate: Navi
       setError(errorMessage(caught, 'Commande indisponible pour le moment.'))
       setStatus('error')
     }
+  }
+
+  if (!vehicle && loading) {
+    return (
+      <div className="page shell empty-state">
+        <p className="eyebrow">Chargement</p>
+        <h1>Chargement du véhicule…</h1>
+      </div>
+    )
   }
 
   if (!vehicle) {

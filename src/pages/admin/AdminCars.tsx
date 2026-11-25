@@ -3,6 +3,7 @@ import { Pencil, Plus, Trash2, UploadCloud } from 'lucide-react'
 import { adminList } from '../../lib/admin'
 import { apiFetch, errorMessage } from '../../lib/api'
 import { uploadImagesDirect } from '../../lib/cloudinaryUpload'
+import { useVehicles } from '../../context/VehiclesContext'
 import { formatEuro, formatKm } from '../../lib/format'
 import type { VehicleDTO } from '../../types/features'
 
@@ -91,6 +92,7 @@ function toPayload(form: CarForm) {
 }
 
 export default function AdminCars() {
+  const { refresh: refreshPublicCatalogue } = useVehicles()
   const [cars, setCars] = useState<VehicleDTO[]>([])
   const [form, setForm] = useState<CarForm | null>(null)
   const [status, setStatus] = useState<'loading' | 'idle' | 'error'>('loading')
@@ -134,6 +136,7 @@ export default function AdminCars() {
       })
       setForm(null)
       await load()
+      refreshPublicCatalogue()
     } catch (caught) {
       setActionError(errorMessage(caught, 'Enregistrement indisponible.'))
     }
@@ -144,6 +147,7 @@ export default function AdminCars() {
     try {
       await apiFetch(`/admin/cars/${encodeURIComponent(car.id)}`, { method: 'DELETE' })
       await load()
+      refreshPublicCatalogue()
     } catch (caught) {
       setActionError(errorMessage(caught, 'Suppression indisponible.'))
     }

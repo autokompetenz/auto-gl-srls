@@ -1,10 +1,11 @@
 import { Heart } from 'lucide-react'
 import VehicleCard from '../components/VehicleCard'
-import { vehicleById } from '../data/vehicles'
+import { useVehicles } from '../context/VehiclesContext'
 import type { Compare } from '../hooks/useCompare'
 import type { Favorites } from '../hooks/useFavorites'
 
 export default function Favorites({ favorites, compare }: { favorites: Favorites; compare: Compare }) {
+  const { vehicleById } = useVehicles()
   const saved = favorites.ids.map(vehicleById).filter((vehicle): vehicle is NonNullable<typeof vehicle> => Boolean(vehicle))
 
   return (

@@ -1,8 +1,9 @@
 import { ArrowRight, X } from 'lucide-react'
-import { vehicleById } from '../data/vehicles'
+import { useVehicles } from '../context/VehiclesContext'
 import type { Compare } from '../hooks/useCompare'
 
 export default function CompareBar({ compare, hidden }: { compare: Compare; hidden: boolean }) {
+  const { vehicleById } = useVehicles()
   if (hidden || compare.ids.length === 0) return null
 
   const selected = compare.ids.map(vehicleById).filter((vehicle): vehicle is NonNullable<typeof vehicle> => Boolean(vehicle))
