@@ -1,0 +1,285 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "postgresql"
+  url          = env("DATABASE_URL")
+  directUrl    = env("DIRECT_URL")
+  relationMode = "prisma"
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+enum FuelType {
+  ELECTRIC
+  HYBRID
+  PETROL
+  DIESEL
+  LPG
+}
+
+enum Transmission {
+  AUTOMATIC
+  MANUAL
+}
+
+enum Category {
+  CITY
+  COMPACT
+  SUV
+  ESTATE
+  VAN
+  MOTORHOME
+}
+
+enum PurchaseType {
+  ACHAT
+  LOCATION
+}
+
+enum DeliveryType {
+  LIVRAISON
+  RETRAIT
+}
+
+enum PaymentType {
+  CASH
+  TRANSFER
+  CHECK
+  ONLINE
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum InstallmentType {
+  FULL
+  MONTHLY
+  CUSTOM
+}
+
+enum PaymentPlan {
+  FULL
+  DEPOSIT
+  MONTHLY
+}
+
+model User {
+  id         String   @id @default(cuid())
+  email      String   @unique
+  password   String
+  name       String
+  phone      String?
+  role       Role     @default(CUSTOMER)
+  address    String?
+  postalCode String?
+  city       String?
+  country    String   @default("France")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  carts     Cart[]
+  orders    Order[]
+  favorites Favorite[]
+  alerts    SearchAlert[]
+
+  @@index([role])
+}
+
+model Car {
+  id            String        @id
+  brandKey      String        @default("AUTO GL")
+  name          String
+  version       String
+  year          Int
+  mileage       Int
+  price         Int
+  color         String
+  image         String
+  gallery       Json
+  wheels        String
+  location      String
+  warranty      String
+  gearbox       String
+  badges        Json
+  description   String
+  equipment     Json
+  technicalData Json?
+  fuel          FuelType      @default(ELECTRIC)
+  transmission  Transmission  @default(AUTOMATIC)
+  category      Category      @default(CITY)
+  isActive      Boolean       @default(true)
+  isFeatured    Boolean       @default(false)
+  isSold        Boolean       @default(false)
+  slug          String        @unique
+  views         Int           @default(0)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  orderItems OrderItem[]
+  carts      Cart[]
+  favorites  Favorite[]
+
+  @@index([isActive])
+  @@index([brandKey])
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  carId     String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  car  Car  @relation(fields: [carId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, carId])
+  @@index([carId])
+}
+
+model SearchAlert {
+  id            String   @id @default(cuid())
+  token         String   @unique
+  userId        String?
+  email         String
+  name          String
+  filters       Json
+  active        Boolean  @default(true)
+  notifiedCount Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([active])
+  @@index([email])
+}
+
+model Cart {
+  id        String   @id @default(cuid())
+  userId    String?
+  sessionId String?
+  carId     String
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  car  Car   @relation(fields: [carId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, carId])
+  @@unique([sessionId, carId])
+  @@index([carId])
+}
+
+model Order {
+  id                  String        @id @default(cuid())
+  orderNumber         String        @unique
+  userId              String?
+  customerName        String
+  customerEmail       String
+  customerPhone       String?
+  address             String
+  postalCode          String
+  city                String
+  country             String        @default("France")
+  notes               String?
+  purchaseType        PurchaseType  @default(ACHAT)
+  deliveryType        DeliveryType  @default(LIVRAISON)
+  paymentPlan         PaymentPlan   @default(FULL)
+  totalPrice          Int
+  currency            String        @default("EUR")
+  status              OrderStatus   @default(PENDING)
+  paymentBeneficiary  String?
+  paymentIban         String?
+  paymentBic          String?
+  paymentTransferType String?
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  user    User?           @relation(fields: [userId], references: [id], onDelete: SetNull)
+  items   OrderItem[]
+  tracking OrderTracking[]
+  payments Payment[]
+
+  @@index([customerEmail])
+  @@index([status])
+  @@index([userId])
+}
+
+model OrderItem {
+  id         String @id @default(cuid())
+  orderId    String
+  carId      String?
+  carSnapshot Json
+  quantity   Int    @default(1)
+  unitPrice  Int
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  car   Car?  @relation(fields: [carId], references: [id], onDelete: SetNull)
+
+  @@index([orderId])
+  @@index([carId])
+}
+
+model OrderTracking {
+  id        String      @id @default(cuid())
+  orderId   String
+  status    OrderStatus
+  note      String?
+  createdAt DateTime    @default(now())
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+}
+
+model Payment {
+  id               String        @id @default(cuid())
+  orderId          String
+  type             PaymentType   @default(TRANSFER)
+  status           PaymentStatus @default(PENDING)
+  amount           Int
+  installmentNumber Int?
+  installmentType  InstallmentType @default(FULL)
+  dueDate          DateTime?
+  paidAt           DateTime?
+  note             String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@index([status])
+}
+
+model BankInfo {
+  id            String   @id @default(cuid())
+  beneficiary   String
+  iban          String
+  bic           String
+  transferType  String   @default("Virement")
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([isActive])
+}
