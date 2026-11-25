@@ -7,6 +7,7 @@ import { requireVehicle } from '../lib/vehicles.js'
 import { authenticateToken, optionalAuth } from '../middleware/auth.js'
 import { ordersLimiter } from '../middleware/rateLimit.js'
 import { asyncHandler } from '../middleware/errors.js'
+import { sendNewOrderMails } from '../lib/mailer.js'
 
 const router = Router()
 
@@ -18,7 +19,11 @@ router.post(
     const data = validate(orderCreateSchema, req.body)
     const car = await requireVehicle(data.carId)
     const order = await createOrder(data, car, req.user?.id ?? null)
-    res.status(201).json({ order: toOrderDTO(order) })
+    const dto = toOrderDTO(order)
+    // Les deux envois sont await : sur Vercel, une promesse abandonnée serait
+    // tuée dès la fin de la function. sendMail encaisse les erreurs SMTP.
+    const emails = await sendNewOrderMails(dto)
+    res.status(201).json({ order: dto, emails })
   }),
 )
 
