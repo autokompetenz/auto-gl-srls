@@ -13,7 +13,7 @@ import {
   validate,
 } from '../lib/validation.js'
 import { deleteImage, getUploadSignature, isCloudinaryConfigured, uploadImage } from '../lib/cloudinary.js'
-import { comparePassword, publicUser, signToken, verifyAdminCode } from '../lib/auth.js'
+import { publicUser, signToken, verifyAdminCode } from '../lib/auth.js'
 import { notifyAlerts } from '../lib/alerts.js'
 import { getStoredBank, saveBank } from '../lib/bank.js'
 import { patchAdminOrder, toPaymentDTO } from '../lib/orders.js'
@@ -42,31 +42,22 @@ function requireCloudinary(req, res, next) {
   next()
 }
 
-// Connexion admin : par code haché ou par identifiants, toujours limitée.
+// Connexion admin : uniquement par code haché, toujours limitée.
 router.post(
   '/login',
   adminLoginLimiter,
   asyncHandler(async (req, res) => {
-    const data = validate(adminLoginSchema, req.body)
-    const configuredEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase()
-    let user
+    const { code } = validate(adminLoginSchema, req.body)
+    if (!(await verifyAdminCode(code))) throw new HttpError(401, 'Code invalide')
 
-    if ('code' in data) {
-      if (!(await verifyAdminCode(data.code))) throw new HttpError(401, 'Code invalide')
-      user = configuredEmail
-        ? await prisma.user.findUnique({ where: { email: configuredEmail } })
-        : await prisma.user.findFirst({ where: { role: 'ADMIN' }, orderBy: { createdAt: 'asc' } })
-      if (!user || user.role !== 'ADMIN') {
-        throw new HttpError(503, 'Aucun compte administrateur configuré')
-      }
-    } else {
-      if (configuredEmail && data.email !== configuredEmail) {
-        throw new HttpError(401, 'Identifiants invalides')
-      }
-      user = await prisma.user.findUnique({ where: { email: data.email } })
-      if (!user || user.role !== 'ADMIN' || !(await comparePassword(data.password, user.password))) {
-        throw new HttpError(401, 'Identifiants invalides')
-      }
+    // Le code ouvre une session pour le compte administrateur configuré ;
+    // aucun mot de passe n'est exposé ni vérifié côté navigateur.
+    const configuredEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase()
+    const user = configuredEmail
+      ? await prisma.user.findUnique({ where: { email: configuredEmail } })
+      : await prisma.user.findFirst({ where: { role: 'ADMIN' }, orderBy: { createdAt: 'asc' } })
+    if (!user || user.role !== 'ADMIN') {
+      throw new HttpError(503, 'Aucun compte administrateur configuré')
     }
 
     res.json({ user: publicUser(user), token: signToken(user) })

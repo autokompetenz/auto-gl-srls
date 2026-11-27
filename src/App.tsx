@@ -4,7 +4,6 @@ import Header from './components/Header'
 import { useCompare } from './hooks/useCompare'
 import { useFavorites } from './hooks/useFavorites'
 import { useRoute } from './hooks/useRoute'
-import Account from './pages/Account'
 import AlertManage from './pages/AlertManage'
 import Catalogue from './pages/Catalogue'
 import Commande from './pages/Commander'
@@ -13,7 +12,6 @@ import Contact from './pages/Contact'
 import Favorites from './pages/Favorites'
 import Home from './pages/Home'
 import Legal from './pages/Legal'
-import MyOrders from './pages/MyOrders'
 import OrderConfirm from './pages/OrderConfirm'
 import OrderTracking from './pages/OrderTracking'
 import Simulation from './pages/Simulation'
@@ -40,8 +38,6 @@ export default function App() {
         {route.page === 'checkout' && <Commande id={route.id} navigate={navigate} />}
         {route.page === 'order-confirm' && <OrderConfirm orderNumber={route.orderNumber} />}
         {route.page === 'tracking' && <OrderTracking orderNumber={route.orderNumber} />}
-        {route.page === 'my-orders' && <MyOrders />}
-        {route.page === 'account' && <Account navigate={navigate} />}
         {route.page === 'alert' && <AlertManage token={route.token} navigate={navigate} />}
         {route.page === 'admin' && <AdminGate section={route.section} />}
       </main>

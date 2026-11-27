@@ -414,7 +414,6 @@ fieldset legend { margin-bottom: 14px; color: var(--acid); font-size: 13px; lett
 .order-list-item h2 { margin-top: 4px; font-size: 20px; }
 .order-list-item p:not(.eyebrow) { margin-top: 6px; color: var(--muted); font-size: 13px; }
 .order-list-item > strong { color: var(--acid); font-weight: 400; }
-.my-orders-page .order-card { margin-top: 24px; }
 
 /* Account and alerts */
 .account-card { max-width: 520px; }

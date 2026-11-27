@@ -2,15 +2,6 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { HttpError } from './helpers.js'
 
-export async function hashPassword(password) {
-  return bcrypt.hash(password, 12)
-}
-
-export async function comparePassword(password, hash) {
-  if (!hash) return false
-  return bcrypt.compare(password, hash)
-}
-
 /** Code d'accès administrateur : comparaison bcrypt (à temps constant). */
 export async function verifyAdminCode(code) {
   const hash = process.env.ADMIN_CODE_HASH?.trim()

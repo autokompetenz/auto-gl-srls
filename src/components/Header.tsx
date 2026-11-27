@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { Heart, Menu, X } from 'lucide-react'
-import { useAuth } from '../context/AuthContext'
 import type { Route } from '../hooks/useRoute'
 
 const links = [
@@ -9,15 +8,12 @@ const links = [
   { href: '#/comparateur', label: 'Comparateur', page: 'compare' },
   { href: '#/simulation', label: 'Simulation', page: 'simulation' },
   { href: '#/suivi', label: 'Suivi', page: 'tracking' },
-  { href: '#/mes-commandes', label: 'Mes commandes', page: 'my-orders' },
   { href: '#/favoris', label: 'Favoris', page: 'favorites' },
   { href: '#/contact', label: 'Contact', page: 'contact' },
 ] as const
 
 export default function Header({ route, favoritesCount, compareCount }: { route: Route; favoritesCount: number; compareCount: number }) {
-  const { user } = useAuth()
   const [menuOpen, setMenuOpen] = useState(false)
-  const accountLabel = user ? 'Compte' : 'Connexion'
   const isActive = (page: (typeof links)[number]['page']) => route.page === page
 
   // Le menu mobile se referme dès que la route change (navigation par hash).
@@ -44,12 +40,12 @@ export default function Header({ route, favoritesCount, compareCount }: { route:
             </a>
           ))}
           <a
-            href="#/connexion"
-            className={route.page === 'account' || route.page === 'admin' ? 'nav-link active' : 'nav-link'}
-            aria-current={route.page === 'account' ? 'page' : undefined}
+            href="#/admin"
+            className={route.page === 'admin' ? 'nav-link active' : 'nav-link'}
+            aria-current={route.page === 'admin' ? 'page' : undefined}
             onClick={close}
           >
-            {accountLabel}
+            Admin
           </a>
         </nav>
         <div className="header-counters">

@@ -8,8 +8,6 @@ type Session = { token: string; user: User }
 type AuthValue = {
   user: User | null
   token: string | null
-  login: (email: string, password: string) => Promise<User>
-  register: (name: string, email: string, password: string) => Promise<User>
   loginAdminCode: (code: string) => Promise<User>
   logout: () => void
   refresh: () => Promise<User | null>
@@ -42,6 +40,7 @@ function saveSession(session: Session | null): void {
   }
 }
 
+/** Seule l'authentification par code admin est exposée côté navigateur. */
 async function authenticate(path: string, body: Record<string, string>): Promise<Session> {
   const response = await apiFetch<{ user?: User; token?: string }>(path, { method: 'POST', body })
   if (!response?.user || typeof response.token !== 'string' || !response.token) {
@@ -58,18 +57,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     saveSession(next)
     setSession(next)
   }, [])
-
-  const login = useCallback(async (email: string, password: string) => {
-    const next = await authenticate('/auth/login', { email, password })
-    store(next)
-    return next.user
-  }, [store])
-
-  const register = useCallback(async (name: string, email: string, password: string) => {
-    const next = await authenticate('/auth/register', { name, email, password })
-    store(next)
-    return next.user
-  }, [store])
 
   const loginAdminCode = useCallback(async (code: string) => {
     const next = await authenticate('/admin/login', { code })
@@ -105,12 +92,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value = useMemo<AuthValue>(() => ({
     user: session?.user ?? null,
     token: session?.token ?? null,
-    login,
-    register,
     loginAdminCode,
     logout,
     refresh,
-  }), [session, login, register, loginAdminCode, logout, refresh])
+  }), [session, loginAdminCode, logout, refresh])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

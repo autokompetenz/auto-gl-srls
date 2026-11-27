@@ -17,10 +17,9 @@ export default function Footer() {
           <a href="#/contact">Nous contacter</a>
         </div>
         <div className="footer-group">
-          <h2>Commandes et compte</h2>
+          <h2>Commandes et administration</h2>
           <a href="#/suivi">Suivre une commande</a>
-          <a href="#/mes-commandes">Mes commandes</a>
-          <a href="#/connexion">Connexion / Compte</a>
+          <a href="#/admin">Administration</a>
           <a href="#/mentions-legales">Mentions légales</a>
         </div>
         <div className="footer-group">

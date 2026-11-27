@@ -15,9 +15,7 @@ export type Route =
   | { page: 'checkout'; id: string }
   | { page: 'order-confirm'; orderNumber: string }
   | { page: 'tracking'; orderNumber: string | null }
-  | { page: 'my-orders' }
   | { page: 'simulation' }
-  | { page: 'account' }
   | { page: 'admin'; section: AdminSection }
 
 function decode(value: string): string {
@@ -57,6 +55,17 @@ function segment(path: string, prefix: string): string | null {
   return value ? decode(value) : null
 }
 
+/** Anciennes pages supprimées : les liens/bookmarks reviennent à l'accueil. */
+const removedPaths = new Set(['/connexion', '/mes-commandes'])
+
+function normalizeLegacyHash(): void {
+  const raw = window.location.hash.replace(/^#/, '').split('?', 1)[0]
+  const path = (raw || '/').replace(/\/+$/, '') || '/'
+  if (removedPaths.has(path)) {
+    window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}#/`)
+  }
+}
+
 export function parseHash(): Route {
   const raw = window.location.hash.replace(/^#/, '') || '/'
   const [pathPart, queryPart = ''] = raw.split('?', 2)
@@ -68,9 +77,7 @@ export function parseHash(): Route {
   if (path === '/contact') return { page: 'contact' }
   if (path === '/mentions-legales') return { page: 'legal' }
   if (path === '/comparateur') return { page: 'compare' }
-  if (path === '/mes-commandes') return { page: 'my-orders' }
   if (path === '/simulation') return { page: 'simulation' }
-  if (path === '/connexion') return { page: 'account' }
 
   const vehicleId = segment(path, '/vehicule/')
   if (vehicleId) return { page: 'vehicle', id: vehicleId }
@@ -106,9 +113,11 @@ export function useRoute() {
 
   useEffect(() => {
     const update = () => {
+      normalizeLegacyHash()
       setRoute(parseHash())
       window.scrollTo({ top: 0, behavior: 'auto' })
     }
+    normalizeLegacyHash()
     window.addEventListener('hashchange', update)
     return () => window.removeEventListener('hashchange', update)
   }, [])

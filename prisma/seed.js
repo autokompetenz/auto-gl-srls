@@ -39,15 +39,14 @@ async function seedVehicles() {
 }
 
 async function seedAdmin() {
-  const codeConfigured = Boolean(process.env.ADMIN_CODE_HASH?.trim())
-  // Sans mot de passe fourni, le compte admin sert uniquement au code : son
-  // mot de passe aléatoire n'est jamais affiché ni réutilisable.
-  const email = process.env.ADMIN_EMAIL?.trim().toLowerCase() || (codeConfigured ? 'admin@auto-gl.local' : '')
-  const password = process.env.ADMIN_PASSWORD || (codeConfigured ? randomBytes(24).toString('hex') : '')
-  if (!email || !password) {
-    console.warn('[seed] ADMIN_CODE_HASH ou ADMIN_EMAIL + ADMIN_PASSWORD absents : aucun administrateur créé')
+  // L'accès administrateur se fait uniquement par code. Le mot de passe du
+  // compte est aléatoire, jamais affiché et jamais utilisé pour se connecter.
+  if (!process.env.ADMIN_CODE_HASH?.trim()) {
+    console.warn('[seed] ADMIN_CODE_HASH absent : aucun administrateur créé')
     return
   }
+  const email = process.env.ADMIN_EMAIL?.trim().toLowerCase() || 'admin@auto-gl.local'
+  const password = randomBytes(24).toString('hex')
   const existing =
     (await prisma.user.findUnique({ where: { email } })) ||
     (await prisma.user.findFirst({ where: { role: 'ADMIN' } }))

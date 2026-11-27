@@ -10,7 +10,7 @@ Node.js >= 22 et pnpm 10.15.1 sont requis.
 
 ```sh
 cp .env.example .env
-# renseigner DATABASE_URL, DIRECT_URL, JWT_SECRET, ADMIN_EMAIL, ADMIN_PASSWORD, ...
+# renseigner DATABASE_URL, DIRECT_URL, JWT_SECRET, ADMIN_CODE_HASH, ...
 pnpm db:push
 pnpm db:seed
 pnpm api
@@ -18,10 +18,9 @@ pnpm api
 
 Le seed (`tsx prisma/seed.js`) importe `src/data/vehicles.ts`, synchronise les 8 véhicules
 ( `brandKey: 'AUTO GL'`, `fuel: 'ELECTRIC'`, `transmission: 'AUTOMATIC'`, `category: 'CITY'`,
-`slug` dérivé de l'id ) et crée l'administrateur si `ADMIN_CODE_HASH` ou
-`ADMIN_EMAIL` + `ADMIN_PASSWORD` sont renseignés (mot de passe haché bcrypt).
-Avec un code uniquement, le compte admin reçoit un mot de passe
-aléatoire non affiché : la connexion se fait alors par `{code}`.
+`slug` dérivé de l'id ) et crée l'administrateur si `ADMIN_CODE_HASH` est renseigné.
+Le compte admin reçoit un mot de passe aléatoire non affiché : la connexion se fait
+**uniquement** par `{code}`, comparé au hash bcrypt.
 Les coordonnées bancaires ne sont **pas** semées : elles sont saisies uniquement
 dans l'espace admin (`#/admin/parametres`) via `PUT /api/admin/bank` et stockées en base.
 
@@ -36,7 +35,7 @@ dans l'espace admin (`#/admin/parametres`) via `PUT /api/admin/bank` et stockée
 | `PORT` | Port de l'API, 3001 par défaut |
 | `APP_URL` | Origine autorisée par CORS et lien dans les e-mails d'alerte |
 | `ADMIN_CODE_HASH` | Hash bcrypt du code d'accès admin (jamais le code en clair) |
-| `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Connexion admin classique, facultative si un code est configuré |
+| `ADMIN_EMAIL` | Facultatif : choisit le compte admin associé au code (sinon le premier admin créé) |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | Envoi d'e-mails (optionnel) |
 | `FROM_EMAIL`, `FROM_NAME`, `LEADS_EMAIL` | Expéditeur et destinataire des messages de contact |
 | `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` | Upload d'images |
@@ -55,7 +54,7 @@ répond `503`.
   (validation Zod / JSON invalide), `401` (auth), `403` (droits), `404` (ressource),
   `409` (conflit, par exemple e-mail déjà utilisé ou numéro de commande en doublon),
   `413` (fichier > 5 Mo), `429` (limiteur) et `500` (message générique, sans stack).
-- Limiteurs : `/api/auth/login` et `/api/admin/login` (10/15 min),
+- Limiteurs : `/api/admin/login` (10/15 min),
   `/api/orders` (30/h, création et suivi), `/api/alerts` (30/h).
 - Les routes `/admin/*` sauf `/api/admin/login` passent par `authenticateToken` puis
   `requireAdmin` (rôle revérifié en base, pas seulement dans le JWT).
@@ -65,13 +64,12 @@ répond `503`.
 | Méthode | Route | Auth | Réponse |
 | --- | --- | --- | --- |
 | GET | `/api/health` | — | `{name:'AUTO GL SRLS API',version:'0.2.0',status:'ok',time}` |
-| POST | `/api/auth/register` | — | `{user:{id,name,email,role},token}` — 201 |
-| POST | `/api/auth/login` | — | `{user,token}` |
-| GET | `/api/auth/me` | Bearer | `{user}` |
-| POST | `/api/admin/login` | — | `{user,token}` (`{code}` haché, ou `{email,password}` bcrypt) |
+| GET | `/api/auth/me` | Bearer | `{user}` (revérification du JWT admin obtenu par code) |
+| POST | `/api/admin/login` | — | `{user,token}` avec `{code}` uniquement |
 
-Corps register : `{name,email,password}` (mot de passe >= 8 caractères).
-Corps login : `{email,password}`. Corps admin : `{code}` ou `{email,password}`.
+Il n'existe plus de route publique d'inscription ou de connexion client.
+Corps admin : `{code}` (chaîne de 4 à 64 caractères), comparé à `ADMIN_CODE_HASH`.
+Un corps `{email,password}` est rejeté avec `400`. Le JWT obtenu est valable 7 jours.
 
 ## 4. Véhicules
 
@@ -330,7 +328,7 @@ demande `POST /api/admin/upload-signature` (JWT ADMIN), puis envoie chaque
 fichier directement à `api.cloudinary.com`. Cela évite la limite de 4,5 Mo du
 corps des requêtes et garde `CLOUDINARY_API_SECRET` côté serveur. Les variables
 à renseigner dans le projet Vercel sont `DATABASE_URL`, `DIRECT_URL`,
-`JWT_SECRET`, `APP_URL`, `ADMIN_CODE_HASH`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`,
+`JWT_SECRET`, `APP_URL`, `ADMIN_CODE_HASH`, `ADMIN_EMAIL` (facultatif),
 `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `FROM_EMAIL`, `FROM_NAME`,
 `LEADS_EMAIL`, `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY` et
 `CLOUDINARY_API_SECRET`. `PORT` reste local et n'est pas nécessaire.
