@@ -27,6 +27,7 @@ export default function Catalogue({ favorites, compare }: { favorites: Favorites
   const { colors, wheelOptions, years, maxPrice, maxMileage } = facets
 
   const [alertOpen, setAlertOpen] = useState(false)
+  const [filtersOpen, setFiltersOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [color, setColor] = useState('all')
   const [wheels, setWheels] = useState('all')
@@ -96,51 +97,61 @@ export default function Catalogue({ favorites, compare }: { favorites: Favorites
       </div>
 
       <div className="catalogue-layout">
-        <aside className="filters" aria-label="Filtres de recherche">
+        <aside className={filtersOpen ? 'filters is-open' : 'filters'} aria-label="Filtres de recherche">
           <div className="filters-head">
             <h2><SlidersHorizontal size={18} aria-hidden="true" /> Filtres</h2>
             <button type="button" className="reset-button" onClick={reset}><RotateCcw size={15} aria-hidden="true" /> Réinitialiser</button>
+            <button
+              type="button"
+              className="mobile-filters-toggle"
+              aria-expanded={filtersOpen}
+              onClick={() => setFiltersOpen(open => !open)}
+            >
+              {filtersOpen ? 'Masquer les filtres' : 'Afficher les filtres'}
+            </button>
           </div>
-          <label className="filter-field">
-            <span>Recherche</span>
-            <span className="input-with-icon">
-              <Search size={16} aria-hidden="true" />
-              <input type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Couleur, ville, version…" />
-            </span>
-          </label>
-          <label className="filter-field">
-            <span>Couleur</span>
-            <select value={color} onChange={event => setColor(event.target.value)}>
-              <option value="all">Toutes les couleurs</option>
-              {colors.map(item => <option key={item} value={item}>{item}</option>)}
-            </select>
-          </label>
-          <label className="filter-field">
-            <span>Jantes</span>
-            <select value={wheels} onChange={event => setWheels(event.target.value)}>
-              <option value="all">Toutes les jantes</option>
-              {wheelOptions.map(item => <option key={item} value={item}>{item}</option>)}
-            </select>
-          </label>
-          <label className="filter-field">
-            <span>Année</span>
-            <select value={year} onChange={event => setYear(event.target.value)}>
-              <option value="all">Toutes les années</option>
-              {years.map(item => <option key={item} value={item}>{item}</option>)}
-            </select>
-          </label>
-          <label className="filter-field range-field">
-            <span>Prix maximum : <b>{formatEuro(priceLimit)}</b></span>
-            <input type="range" min={20000} max={maxPrice} step={100} value={priceLimit} onChange={event => setPriceLimit(Number(event.target.value))} />
-          </label>
-          <label className="filter-field range-field">
-            <span>Kilométrage maximum : <b>{formatKm(mileageLimit)}</b></span>
-            <input type="range" min={5000} max={maxMileage} step={500} value={mileageLimit} onChange={event => setMileageLimit(Number(event.target.value))} />
-          </label>
-          <label className="checkbox-field">
-            <input type="checkbox" checked={warrantyOnly} onChange={event => setWarrantyOnly(event.target.checked)} />
-            <span>Garantie 12 mois uniquement</span>
-          </label>
+          <div className="filters-body">
+            <label className="filter-field">
+              <span>Recherche</span>
+              <span className="input-with-icon">
+                <Search size={16} aria-hidden="true" />
+                <input type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Couleur, ville, version…" />
+              </span>
+            </label>
+            <label className="filter-field">
+              <span>Couleur</span>
+              <select value={color} onChange={event => setColor(event.target.value)}>
+                <option value="all">Toutes les couleurs</option>
+                {colors.map(item => <option key={item} value={item}>{item}</option>)}
+              </select>
+            </label>
+            <label className="filter-field">
+              <span>Jantes</span>
+              <select value={wheels} onChange={event => setWheels(event.target.value)}>
+                <option value="all">Toutes les jantes</option>
+                {wheelOptions.map(item => <option key={item} value={item}>{item}</option>)}
+              </select>
+            </label>
+            <label className="filter-field">
+              <span>Année</span>
+              <select value={year} onChange={event => setYear(event.target.value)}>
+                <option value="all">Toutes les années</option>
+                {years.map(item => <option key={item} value={item}>{item}</option>)}
+              </select>
+            </label>
+            <label className="filter-field range-field">
+              <span>Prix maximum : <b>{formatEuro(priceLimit)}</b></span>
+              <input type="range" min={20000} max={maxPrice} step={100} value={priceLimit} onChange={event => setPriceLimit(Number(event.target.value))} />
+            </label>
+            <label className="filter-field range-field">
+              <span>Kilométrage maximum : <b>{formatKm(mileageLimit)}</b></span>
+              <input type="range" min={5000} max={maxMileage} step={500} value={mileageLimit} onChange={event => setMileageLimit(Number(event.target.value))} />
+            </label>
+            <label className="checkbox-field">
+              <input type="checkbox" checked={warrantyOnly} onChange={event => setWarrantyOnly(event.target.checked)} />
+              <span>Garantie 12 mois uniquement</span>
+            </label>
+          </div>
         </aside>
 
         <section className="catalogue-results" aria-label="Véhicules disponibles">

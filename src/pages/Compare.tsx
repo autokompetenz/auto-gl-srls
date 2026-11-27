@@ -63,13 +63,13 @@ export default function Compare({ compare }: { compare: CompareHook }) {
                 {rows.map(row => (
                   <tr key={row.label}>
                     <th scope="row">{row.label}</th>
-                    {selected.map(vehicle => <td key={vehicle.id}>{row.value(vehicle)}</td>)}
+                    {selected.map(vehicle => <td key={vehicle.id} data-vehicle={vehicle.name}>{row.value(vehicle)}</td>)}
                   </tr>
                 ))}
                 <tr>
                   <th scope="row">Action</th>
                   {selected.map(vehicle => (
-                    <td key={vehicle.id}>
+                    <td key={vehicle.id} data-vehicle={vehicle.name}>
                       <a className="text-link" href={`#/commander/${encodeURIComponent(vehicle.id)}`}>
                         Commander <ArrowRight size={15} aria-hidden="true" />
                       </a>

@@ -28,6 +28,7 @@ Avec Neon, utiliser l'**endpoint direct** (host sans `-pooler`) pour `DATABASE_U
 - Fiche véhicule : galerie navigable avec plusieurs images par véhicule, description structurée en paragraphes et listes, caractéristiques, équipements, vues techniques, demande d'essai et commande. Une annonce avec une seule image reste affichable.
 - Favoris et comparateur (3 véhicules maximum, ancien retiré automatiquement) persistés dans `localStorage` (`auto-gl-srls:favorites` et `auto-gl-srls:compare`). Ces deux listes restent **locales au navigateur** et ne passent pas par l'API.
 - Navigation par hash : `#/`, `#/catalogue`, `#/vehicule/...`, `#/favoris`, `#/comparateur`, `#/simulation`, `#/suivi[/:commande]`, `#/commande-confirmee/:commande`, `#/mes-commandes`, `#/commander/:id`, `#/connexion`, `#/alerte/:token`, `#/admin[/...]`, `#/contact`, `#/mentions-legales`.
+- Interface responsive : même identité visuelle du desktop au mobile, avec menu repliable, filtres repliables sur petit écran, grilles empilées, cibles tactiles élargies et comparateur présenté en fiches sans défilement horizontal.
 
 ### Fonctionnalités API
 
