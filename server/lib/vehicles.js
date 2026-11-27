@@ -38,6 +38,7 @@ export function toVehicleDTO(car) {
     fuel: car.fuel,
     transmission: car.transmission,
     category: car.category,
+    isActive: car.isActive,
     isFeatured: car.isFeatured,
     isSold: car.isSold,
     views: car.views,

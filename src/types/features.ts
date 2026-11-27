@@ -20,6 +20,7 @@ export type VehicleDTO = Vehicle & {
   fuel: string
   transmission: string
   category: string
+  isActive: boolean
   isFeatured: boolean
   isSold: boolean
   views: number
