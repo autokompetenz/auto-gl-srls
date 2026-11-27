@@ -16,7 +16,7 @@ import { deleteImage, getUploadSignature, isCloudinaryConfigured, uploadImage } 
 import { publicUser, signToken, verifyAdminCode } from '../lib/auth.js'
 import { notifyAlerts } from '../lib/alerts.js'
 import { getStoredBank, saveBank } from '../lib/bank.js'
-import { patchAdminOrder, toPaymentDTO } from '../lib/orders.js'
+import { orderInclude, patchAdminOrder, toOrderDTO, toPaymentDTO } from '../lib/orders.js'
 import { makeUniqueSlug, requireVehicle, toVehicleDTO } from '../lib/vehicles.js'
 import { authenticateToken, requireAdmin } from '../middleware/auth.js'
 import { adminLoginLimiter } from '../middleware/rateLimit.js'
@@ -223,6 +223,17 @@ router.post(
 
     const images = uploaded.map(({ name, ...item }) => ({ ...item, name }))
     res.json({ url: images[0].url, publicId: images[0].publicId, images })
+  }),
+)
+
+router.get(
+  '/orders',
+  asyncHandler(async (req, res) => {
+    const orders = await prisma.order.findMany({
+      orderBy: { createdAt: 'desc' },
+      include: orderInclude,
+    })
+    res.json(orders.map(toOrderDTO))
   }),
 )
 

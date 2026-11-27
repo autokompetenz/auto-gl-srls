@@ -223,6 +223,7 @@ Corps PATCH : `{status:'PENDING'|'COMPLETED'|'FAILED', paidAt?}`.
 | PUT | `/api/admin/cars/:id` | `VehicleDTO` |
 | DELETE | `/api/admin/cars/:id` | `{ok:true}` |
 | PATCH | `/api/admin/cars/:id/toggle` | `VehicleDTO` (bascule `isActive`) |
+| GET | `/api/admin/orders` | `OrderDTO[]` (toutes les commandes, admin uniquement) |
 | PATCH | `/api/admin/orders/:id` | `OrderDTO` |
 | GET | `/api/admin/bank` | `BankInfo` (brut, ou `null`) |
 | PUT | `/api/admin/bank` | `BankInfo` |
