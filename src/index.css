@@ -115,7 +115,7 @@ main { flex: 1; }
 .card-link:hover { color: var(--acid); }
 
 /* Steps */
-.steps-lead { max-width: 70ch; margin-top: 12px; color: var(--muted); font-size: 16px; line-height: 1.6; }
+.steps-lead, .services-lead { max-width: 70ch; margin-top: 12px; color: var(--muted); font-size: 16px; line-height: 1.6; }
 .steps-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 .step-card { position: relative; padding: 26px; border: 1px solid var(--line); border-radius: 16px; background: #ffffff0a; }
 .step-icons { display: flex; align-items: center; gap: 8px; }
@@ -123,6 +123,15 @@ main { flex: 1; }
 .step-number { position: absolute; top: 18px; right: 20px; color: #ffffff70; font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
 .step-card h3 { margin-top: 18px; font-size: 18px; }
 .step-card p { margin-top: 10px; font-size: 14px; line-height: 1.6; color: var(--muted); }
+
+/* Services */
+.services-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.service-card { position: relative; padding: 26px; border: 1px solid var(--line); border-radius: 16px; background: #ffffff0a; }
+.service-badge { display: inline-flex; padding: 5px 10px; border: 1px solid #edff3940; border-radius: 999px; background: #edff3918; color: var(--acid); font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+.service-icon { display: grid; place-items: center; width: 44px; height: 44px; margin-top: 18px; border-radius: 12px; background: #edff3918; color: var(--acid); }
+.service-card svg { color: var(--acid); }
+.service-card h3 { margin-top: 16px; font-size: 18px; }
+.service-card p { margin-top: 10px; font-size: 14px; line-height: 1.6; color: var(--muted); }
 
 /* Page head and catalogue */
 .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 36px; }
@@ -510,7 +519,7 @@ fieldset legend { margin-bottom: 14px; color: var(--acid); font-size: 13px; lett
 
   .hero { grid-template-columns: 1fr; gap: 44px; }
   .hero-visual { max-width: 640px; }
-  .vehicle-grid, .steps-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .vehicle-grid, .steps-grid, .services-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .simulation-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .simulation-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .stepper { gap: 4px; }
@@ -524,7 +533,7 @@ fieldset legend { margin-bottom: 14px; color: var(--acid); font-size: 13px; lett
   .hero-stats { grid-template-columns: 1fr 1fr; gap: 18px; }
   .hero-tag { left: 0; }
   .section-head, .page-head { align-items: flex-start; flex-direction: column; }
-  .vehicle-grid, .catalogue-grid, .steps-grid, .related-grid { grid-template-columns: 1fr; }
+  .vehicle-grid, .catalogue-grid, .steps-grid, .services-grid, .related-grid { grid-template-columns: 1fr; }
 
   /* Filtres repliés par défaut pour laisser respirer les annonces. */
   .filters-head { flex-wrap: wrap; margin-bottom: 0; }

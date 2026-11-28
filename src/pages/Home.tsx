@@ -1,4 +1,4 @@
-import { ArrowRight, Search, MessageCircle, ClipboardCheck, CreditCard, ShieldCheck, Landmark, Wrench, Truck, Mail, Phone, MapPin, type LucideIcon } from 'lucide-react'
+import { ArrowRight, Search, MessageCircle, ClipboardCheck, CreditCard, ShieldCheck, Landmark, Wrench, Truck, Mail, Phone, MapPin, CarFront, RefreshCw, type LucideIcon } from 'lucide-react'
 import VehicleCard from '../components/VehicleCard'
 import { useVehicles } from '../context/VehiclesContext'
 import type { Compare } from '../hooks/useCompare'
@@ -33,8 +33,17 @@ const steps: { icons: LucideIcon[]; title: string; text: string }[] = [
   {
     icons: [Truck, MapPin],
     title: 'Livraison à domicile',
-    text: 'Transport sécurisé jusqu’à votre porte partout en Allemagne et Europe. Suivi en temps réel via numéro de commande. Livraison soignée, documents remis en main propre. Votre aventure commence !',
+    text: 'Transport sécurisé jusqu’à votre porte partout dans le monde entier. Suivi en temps réel via numéro de commande. Livraison soignée, documents remis en main propre. Votre aventure commence !',
   },
+]
+
+const services: { icon: LucideIcon; badge: string; title: string; text: string }[] = [
+  { icon: CarFront, badge: '2024 Models', title: 'Voitures Neuves', text: 'Derniers modèles, garantie constructeur, financement personnalisé.' },
+  { icon: Wrench, badge: 'Certified', title: 'Voitures d’Occasion', text: 'Véhicules vérifiés, historique complet, garantie jusqu’à 24 mois.' },
+  { icon: CreditCard, badge: 'Fast Approval', title: 'Financement Auto', text: 'Crédit sur mesure, taux avantageux, réponse en 24h.' },
+  { icon: RefreshCw, badge: 'Best Value', title: 'Reprise & Échange', text: 'Reprise de votre véhicule actuel, estimation gratuite.' },
+  { icon: ShieldCheck, badge: 'Full Coverage', title: 'Garantie & SAV', text: 'Garantie étendue, service après-vente, assistance 24/7.' },
+  { icon: Truck, badge: 'Door to Door', title: 'Livraison & Transport', text: 'Livraison à domicile, transport sécurisé, partout dans le monde entier.' },
 ]
 
 export default function Home({ favorites, compare }: { favorites: Favorites; compare: Compare }) {
@@ -107,6 +116,26 @@ export default function Home({ favorites, compare }: { favorites: Favorites; com
               </div>
               <h3>{step.title}</h3>
               <p>{step.text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="shell section services-section">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow">Nos Services</p>
+            <h2>Ce que nous faisons pour vous</h2>
+            <p className="services-lead">De la voiture neuve à l’occasion, votre partenaire pour trouver la perle rare.</p>
+          </div>
+        </div>
+        <div className="services-grid">
+          {services.map(service => (
+            <article className="service-card" key={service.title}>
+              <span className="service-badge">{service.badge}</span>
+              <div className="service-icon"><service.icon size={23} aria-hidden="true" /></div>
+              <h3>{service.title}</h3>
+              <p>{service.text}</p>
             </article>
           ))}
         </div>
