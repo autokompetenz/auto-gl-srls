@@ -39,14 +39,6 @@ export default function Header({ route, favoritesCount, compareCount }: { route:
               {link.label}
             </a>
           ))}
-          <a
-            href="#/admin"
-            className={route.page === 'admin' ? 'nav-link active' : 'nav-link'}
-            aria-current={route.page === 'admin' ? 'page' : undefined}
-            onClick={close}
-          >
-            Admin
-          </a>
         </nav>
         <div className="header-counters">
           <a

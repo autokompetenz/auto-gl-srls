@@ -17,16 +17,15 @@ export default function Footer() {
           <a href="#/contact">Nous contacter</a>
         </div>
         <div className="footer-group">
-          <h2>Commandes et administration</h2>
+          <h2>Commandes</h2>
           <a href="#/suivi">Suivre une commande</a>
-          <a href="#/admin">Administration</a>
           <a href="#/mentions-legales">Mentions légales</a>
         </div>
         <div className="footer-group">
           <h2>Informations</h2>
           <span>REA {company.rea} · ATECO {company.ateco}</span>
           <span>Prix affichés en EUR</span>
-          <span>Commandes, alertes et administration via l’API</span>
+          <span>Commandes et alertes via l’API</span>
         </div>
       </div>
       <div className="shell footer-baseline">
