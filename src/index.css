@@ -116,8 +116,9 @@ main { flex: 1; }
 
 /* Steps */
 .steps-lead { max-width: 70ch; margin-top: 12px; color: var(--muted); font-size: 16px; line-height: 1.6; }
-.steps-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 18px; }
+.steps-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 .step-card { position: relative; padding: 26px; border: 1px solid var(--line); border-radius: 16px; background: #ffffff0a; }
+.step-icons { display: flex; align-items: center; gap: 8px; }
 .step-card svg { color: var(--acid); }
 .step-number { position: absolute; top: 18px; right: 20px; color: #ffffff70; font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
 .step-card h3 { margin-top: 18px; font-size: 18px; }

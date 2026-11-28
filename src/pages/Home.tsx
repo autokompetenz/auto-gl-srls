@@ -1,15 +1,40 @@
-import { ArrowRight, Search, CarFront, CreditCard, Mail, MapPin } from 'lucide-react'
+import { ArrowRight, Search, MessageCircle, ClipboardCheck, CreditCard, ShieldCheck, Landmark, Wrench, Truck, Mail, Phone, MapPin, type LucideIcon } from 'lucide-react'
 import VehicleCard from '../components/VehicleCard'
 import { useVehicles } from '../context/VehiclesContext'
 import type { Compare } from '../hooks/useCompare'
 import type { Favorites } from '../hooks/useFavorites'
 
-const steps = [
-  { icon: Search, title: 'Explorer sans compte', text: 'Accédez au catalogue sans inscription et préparez votre choix à votre rythme.' },
-  { icon: CarFront, title: 'Choisir un véhicule', text: 'Filtrez par prix, année, kilométrage, couleur ou type de jantes, puis consultez chaque fiche en détail.' },
-  { icon: CreditCard, title: 'Commander', text: 'Sélectionnez le financement souhaité et validez votre commande en quelques clics.' },
-  { icon: Mail, title: 'Email de confirmation', text: 'Recevez votre bon de commande avec son numéro unique directement par email.' },
-  { icon: MapPin, title: 'Suivre votre commande', text: 'Suivez chaque étape en temps réel sur notre page de suivi.' },
+const steps: { icons: LucideIcon[]; title: string; text: string }[] = [
+  {
+    icons: [Search, MessageCircle],
+    title: 'Sélection du véhicule',
+    text: 'Parcourez notre catalogue en ligne ou contactez-nous. Filtrez par marque, modèle, prix et kilométrage. Chaque fiche inclut photos HD, historique complet et rapport d’inspection.',
+  },
+  {
+    icons: [MessageCircle, Mail, Phone],
+    title: 'Contact & Devis',
+    text: 'Contactez-nous par WhatsApp, email ou téléphone. Nous vous envoyons un devis détaillé sous 24h avec toutes les options disponibles, frais inclus et conditions de financement.',
+  },
+  {
+    icons: [ClipboardCheck, CreditCard],
+    title: 'Contrat & Financement',
+    text: 'Signature du bon de commande sécurisé. Si besoin, montage de votre dossier de financement avec nos partenaires bancaires. Réponse de principe sous 24h, taux compétitifs garantis.',
+  },
+  {
+    icons: [ShieldCheck, Landmark],
+    title: 'Paiement sécurisé',
+    text: 'Virement bancaire sécurisé ou paiement par étapes selon accord. Reçu officiel émis immédiatement. Transparence totale : aucun frais caché, tout est clairement indiqué dans le contrat.',
+  },
+  {
+    icons: [Wrench, Truck],
+    title: 'Préparation du véhicule',
+    text: 'Votre véhicule est soigneusement préparé : nettoyage professionnel intérieur/extérieur, vérification technique finale, plein de carburant, documentation complète prête à remettre.',
+  },
+  {
+    icons: [Truck, MapPin],
+    title: 'Livraison à domicile',
+    text: 'Transport sécurisé jusqu’à votre porte partout en Allemagne et Europe. Suivi en temps réel via numéro de commande. Livraison soignée, documents remis en main propre. Votre aventure commence !',
+  },
 ]
 
 export default function Home({ favorites, compare }: { favorites: Favorites; compare: Compare }) {
@@ -67,15 +92,19 @@ export default function Home({ favorites, compare }: { favorites: Favorites; com
         <div className="section-head">
           <div>
             <p className="eyebrow">Comment ça marche</p>
-            <h2>De la commande à la livraison</h2>
-            <p className="steps-lead">Commandez votre véhicule en quelques minutes, suivez chaque étape depuis votre email.</p>
+            <h2>De la sélection<br />à la livraison</h2>
+            <p className="steps-lead">Un processus simple et transparent, du choix du véhicule jusqu’à sa livraison chez vous.</p>
           </div>
         </div>
         <div className="steps-grid">
           {steps.map((step, index) => (
             <article className="step-card" key={step.title}>
-              <span className="step-number">Étape {String(index + 1).padStart(2, '0')}</span>
-              <step.icon size={24} aria-hidden="true" />
+              <span className="step-number">Step {String(index + 1).padStart(2, '0')}</span>
+              <div className="step-icons">
+                {step.icons.map((Icon, iconIndex) => (
+                  <Icon key={iconIndex} size={23} aria-hidden="true" />
+                ))}
+              </div>
               <h3>{step.title}</h3>
               <p>{step.text}</p>
             </article>
