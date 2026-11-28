@@ -395,14 +395,8 @@ export default function AdminCars() {
           </section>
 
           <section className="admin-form-section">
-            <h3>Description et équipements</h3>
-            <label>Description<textarea rows={5} value={form.description} onChange={update('description')} placeholder="Une phrase par ligne. Les lignes commençant par - deviennent une liste." /></label>
-            <p className="form-context">Chaque ligne devient un paragraphe, une ligne vide sépare les blocs, et les lignes commençant par « - » forment une liste. Le texte est affiché tel quel, sans HTML.</p>
-            <div className="form-grid">
-              <label>Badges (un par ligne)<textarea rows={3} value={form.badges} onChange={update('badges')} /></label>
-              <label>Équipements (un par ligne)<textarea rows={3} value={form.equipment} onChange={update('equipment')} /></label>
-              <label>Galerie (src|légende par ligne)<textarea rows={3} value={form.gallery} onChange={update('gallery')} /></label>
-            </div>
+            <h3>Description</h3>
+            <label>Description<textarea rows={5} value={form.description} onChange={update('description')} placeholder="Décrivez le véhicule en quelques phrases." /></label>
           </section>
 
           <section className="admin-form-section">
