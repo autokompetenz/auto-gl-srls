@@ -115,7 +115,7 @@ main { flex: 1; }
 .card-link:hover { color: var(--acid); }
 
 /* Steps */
-.steps-lead, .services-lead, .faq-lead, .reviews-lead { max-width: 70ch; margin-top: 12px; color: var(--muted); font-size: 16px; line-height: 1.6; }
+.steps-lead, .services-lead, .faq-lead, .reviews-lead, .protection-lead { max-width: 70ch; margin-top: 12px; color: var(--muted); font-size: 16px; line-height: 1.6; }
 .steps-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 .step-card { position: relative; padding: 26px; border: 1px solid var(--line); border-radius: 16px; background: #ffffff0a; }
 .step-icons { display: flex; align-items: center; gap: 8px; }
@@ -132,6 +132,20 @@ main { flex: 1; }
 .service-card svg { color: var(--acid); }
 .service-card h3 { margin-top: 16px; font-size: 18px; }
 .service-card p { margin-top: 10px; font-size: 14px; line-height: 1.6; color: var(--muted); }
+
+/* Protection */
+.protection-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.protection-card { display: flex; flex-direction: column; padding: 26px; border: 1px solid var(--line); border-radius: 16px; background: #ffffff0a; }
+.protection-icon { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: #edff3918; color: var(--acid); }
+.protection-card h3 { margin-top: 18px; font-size: 18px; }
+.protection-card p { margin-top: 10px; font-size: 14px; line-height: 1.6; color: var(--muted); }
+.protection-points { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; padding: 0; list-style: none; }
+.protection-points li { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; background: #edff3918; color: var(--acid); font-size: 12px; }
+.protection-points li::before { content: '✓'; }
+.protection-card .text-link { margin-top: auto; padding-top: 18px; }
+.protection-highlights { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 18px; padding: 18px 22px; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); }
+.protection-highlights span { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; }
+.protection-highlights svg { color: var(--acid); }
 
 /* Avis clients */
 .reviews-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
@@ -508,6 +522,7 @@ fieldset legend { margin-bottom: 14px; color: var(--acid); font-size: 13px; lett
 /* Adaptive layout */
 @media (max-width: 1100px) {
   .steps-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .protection-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .simulation-layout, .checkout-layout { grid-template-columns: 1fr; }
   .order-summary { position: static; }
   .admin-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -554,7 +569,7 @@ fieldset legend { margin-bottom: 14px; color: var(--acid); font-size: 13px; lett
   .hero-stats { grid-template-columns: 1fr 1fr; gap: 18px; }
   .hero-tag { left: 0; }
   .section-head, .page-head { align-items: flex-start; flex-direction: column; }
-  .vehicle-grid, .catalogue-grid, .steps-grid, .services-grid, .related-grid { grid-template-columns: 1fr; }
+  .vehicle-grid, .catalogue-grid, .steps-grid, .services-grid, .protection-grid, .related-grid { grid-template-columns: 1fr; }
   .faq-item p { padding-left: 22px; }
 
   /* Filtres repliés par défaut pour laisser respirer les annonces. */

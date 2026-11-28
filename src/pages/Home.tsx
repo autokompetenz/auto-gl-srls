@@ -1,4 +1,4 @@
-import { ArrowRight, Search, MessageCircle, ClipboardCheck, CreditCard, ShieldCheck, Landmark, Wrench, Truck, Mail, Phone, MapPin, CarFront, RefreshCw, Star, type LucideIcon } from 'lucide-react'
+import { ArrowRight, Search, MessageCircle, ClipboardCheck, CreditCard, ShieldCheck, Landmark, Wrench, Truck, Mail, Phone, MapPin, CarFront, RefreshCw, Star, CalendarDays, Check, type LucideIcon } from 'lucide-react'
 import VehicleCard from '../components/VehicleCard'
 import { useVehicles } from '../context/VehiclesContext'
 import type { Compare } from '../hooks/useCompare'
@@ -96,6 +96,29 @@ const reviews = [
   },
 ]
 
+const protections: { icon: LucideIcon; title: string; text: string; points: string[] }[] = [
+  {
+    icon: ShieldCheck,
+    title: 'Garantie AUTO GL SRLS',
+    text: 'Incluse dans toutes les commandes. Valable 12 mois ou 10 000 km. Protection moteur, boîte de vitesse, hors pièces d’usure.',
+    points: ['12 mois', '10 000 km', 'Moteur'],
+  },
+  {
+    icon: CalendarDays,
+    title: 'Options d’extension',
+    text: 'Étendez votre protection jusqu’à 36 mois. Options disponibles : assistance 24/7, véhicule de remplacement, garantie carrosserie.',
+    points: ['24 mois', '36 mois', '24/7'],
+  },
+  {
+    icon: CreditCard,
+    title: 'Assurance véhicule',
+    text: 'Solutions d’assurance complètes : responsabilité civile, tous risques, protection contre le vol et les incendies.',
+    points: ['RC', 'Tous risques', 'Vol'],
+  },
+]
+
+const protectionHighlights = ['Garantie incluse', 'Protection étendue', 'Assurance sur mesure', 'Assistance 24/7']
+
 export default function Home({ favorites, compare }: { favorites: Favorites; compare: Compare }) {
   const { vehicles } = useVehicles()
   const featured = vehicles.slice(0, 3)
@@ -187,6 +210,34 @@ export default function Home({ favorites, compare }: { favorites: Favorites; com
               <h3>{service.title}</h3>
               <p>{service.text}</p>
             </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="shell section protection-section">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow">Protection</p>
+            <h2>Garanties &amp; Assurances</h2>
+            <p className="protection-lead">Une protection complète pour votre véhicule, avec des garanties étendues et des options d’assurance sur mesure.</p>
+          </div>
+        </div>
+        <div className="protection-grid">
+          {protections.map(protection => (
+            <article className="protection-card" key={protection.title}>
+              <div className="protection-icon"><protection.icon size={23} aria-hidden="true" /></div>
+              <h3>{protection.title}</h3>
+              <p>{protection.text}</p>
+              <ul className="protection-points">
+                {protection.points.map(point => <li key={point}>{point}</li>)}
+              </ul>
+              <a className="text-link" href="#/contact">En savoir plus <ArrowRight size={16} aria-hidden="true" /></a>
+            </article>
+          ))}
+        </div>
+        <div className="protection-highlights">
+          {protectionHighlights.map(highlight => (
+            <span key={highlight}><Check size={16} aria-hidden="true" />{highlight}</span>
           ))}
         </div>
       </section>
