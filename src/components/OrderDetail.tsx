@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { apiFetch, errorMessage } from '../lib/api'
 import { formatDate, formatEuro } from '../lib/format'
-import type { BankInfo, OrderDTO, OrderStatus } from '../types/features'
+import type { BankInfo, OrderDTO, OrderStatus, PaymentDTO } from '../types/features'
 
 const statusLabels: Record<string, string> = {
   PENDING: 'En attente de validation',
@@ -22,6 +22,13 @@ const planLabels: Record<string, string> = {
   full: 'Paiement intégral',
   deposit: 'Acompte',
   monthly: 'Mensualités',
+}
+
+function paymentRowLabel(payment: PaymentDTO): string {
+  if (payment.installmentType === 'FULL') return 'Paiement intégral'
+  if (payment.installmentType === 'MONTHLY') return 'Mensualité'
+  if (payment.installmentNumber === 1) return 'Acompte'
+  return 'Solde à la livraison'
 }
 
 const steps: { status: OrderStatus; label: string }[] = [
@@ -106,10 +113,12 @@ export default function OrderDetail({ order }: { order: OrderDTO }) {
         <section className="order-section">
           <h3>Récapitulatif financier</h3>
           <dl className="order-finance">
-            <div><dt>Prix total</dt><dd>{formatEuro(order.totalPrice)}</dd></div>
-            <div><dt>Remise</dt><dd>{formatEuro(order.discountAmount)}</dd></div>
-            <div><dt>Acompte</dt><dd>{formatEuro(order.depositAmount)}</dd></div>
-            <div><dt>Mensualité</dt><dd>{order.monthlyAmount > 0 ? `${formatEuro(order.monthlyAmount)} sur ${order.monthlyDuration} mois` : '—'}</dd></div>
+            <div><dt>Prix du véhicule</dt><dd>{formatEuro(order.totalPrice)}</dd></div>
+            {order.discountAmount > 0 && <div><dt>Remise</dt><dd>-{formatEuro(order.discountAmount)}</dd></div>}
+            <div><dt>Montant à payer</dt><dd>{formatEuro(order.amountDue ?? order.totalPrice)}</dd></div>
+            {order.depositAmount > 0 && <div><dt>Acompte</dt><dd>{formatEuro(order.depositAmount)}</dd></div>}
+            {order.monthlyAmount > 0 && <div><dt>Mensualité</dt><dd>{`${formatEuro(order.monthlyAmount)} sur ${order.monthlyDuration} mois`}</dd></div>}
+            {order.balanceAmount > 0 && order.monthlyAmount === 0 && <div><dt>Solde à la livraison</dt><dd>{formatEuro(order.balanceAmount)}</dd></div>}
             <div><dt>Référence de paiement</dt><dd>{order.paymentReference || '—'}</dd></div>
           </dl>
         </section>
@@ -127,7 +136,7 @@ export default function OrderDetail({ order }: { order: OrderDTO }) {
                         {formatDate(payment.dueDate)}
                         {payment.installmentNumber ? <small> · échéance {payment.installmentNumber}</small> : null}
                       </td>
-                      <td>{payment.type}</td>
+                      <td>{paymentRowLabel(payment)}</td>
                       <td>{formatEuro(payment.amount)}</td>
                       <td><span className="status-badge small">{paymentLabels[payment.status] ?? payment.status}</span></td>
                     </tr>

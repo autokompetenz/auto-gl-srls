@@ -44,6 +44,7 @@ export type PaymentDTO = {
   amount: number
   dueDate: string | null
   installmentNumber: number | null
+  installmentType: string | null
 }
 
 export type TrackingDTO = {
@@ -70,7 +71,9 @@ export type OrderDTO = {
   paymentType: string
   totalPrice: number
   discountAmount: number
+  amountDue: number
   depositAmount: number
+  balanceAmount: number
   monthlyAmount: number
   monthlyDuration: number
   paymentReference: string | null

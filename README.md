@@ -32,7 +32,8 @@ Avec Neon, utiliser l'**endpoint direct** (host sans `-pooler`) pour `DATABASE_U
 
 ### Fonctionnalités API
 
-- **Simulation** (`/simulation`) : le serveur calcule la capacité mensuelle (30 % du revenu retenu) et renvoie les véhicules compatibles ; aucun résultat n'est inventé côté navigateur si l'API est indisponible.
+- **Simulation** (`/simulation`) : le serveur calcule la capacité mensuelle (30 % du revenu retenu, apport de 15 %) et renvoie les véhicules compatibles ; aucun résultat n'est inventé côté navigateur si l'API est indisponible.
+- **Paiement** : trois modes au choix — intégral avec remise de 5 %, acompte de 25 % avec solde à la livraison, ou apport de 15 % puis 60 mensualités à 6 %/an. Les montants sont figés sur la commande.
 - **Commande** (`/commander/:id`) : validation locale puis `POST /api/orders`, confirmation avec numéro de commande (`/commande-confirmee/:commande`). La commande est enregistrée côté serveur ; deux e-mails sont envoyés si SMTP est configuré : confirmation détaillée au client et notification à l'équipe (`LEADS_EMAIL`). Le statut des envois est renvoyé dans `emails`.
 - **Suivi** (`/suivi`) : numéro de commande + e-mail (`POST /api/orders/track`), stepper en 5 étapes, récapitulatif financier, échéancier, historique et coordonnées bancaires affichées uniquement après confirmation (statut `CONFIRMED` ou plus).
 - **Alertes** : création depuis le catalogue avec les filtres courants, puis gestion via le lien privé `/alerte/:token` (activation, désactivation, suppression). Le token vient de l'URL, aucun secret n'est embarqué.

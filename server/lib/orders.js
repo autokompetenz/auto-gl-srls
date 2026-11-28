@@ -2,6 +2,7 @@ import { randomBytes } from 'node:crypto'
 import { prisma } from './prisma.js'
 import {
   FINANCING,
+  LEGACY_FINANCING,
   HttpError,
   addMonths,
   monthlyPaymentForAmount,
@@ -39,24 +40,37 @@ export function generateOrderNumber(date = new Date()) {
 }
 
 /** Seul calcul des montants : partagé par la création de commande et les DTO. */
-export function calculateOrderTotals({ price, paymentPlan = 'FULL' }) {
+export function calculateOrderTotals({ price, paymentPlan = 'FULL', rules = FINANCING }) {
   const totalPrice = Math.max(0, Math.round(Number(price) || 0))
-  const base = { totalPrice, discountAmount: 0 }
+  const base = { totalPrice, discountAmount: 0, amountDue: totalPrice }
+
+  if (paymentPlan === 'FULL') {
+    const discountAmount = Math.round(totalPrice * rules.fullPaymentDiscountRate)
+    return {
+      ...base,
+      discountAmount,
+      amountDue: totalPrice - discountAmount,
+      depositAmount: 0,
+      monthlyAmount: 0,
+      monthlyDuration: 0,
+      balanceAmount: 0,
+    }
+  }
 
   if (paymentPlan === 'MONTHLY') {
-    const depositAmount = Math.round(totalPrice * FINANCING.downPaymentRate)
+    const depositAmount = Math.round(totalPrice * rules.downPaymentRate)
     const balance = totalPrice - depositAmount
     return {
       ...base,
       depositAmount,
-      monthlyAmount: monthlyPaymentForAmount(balance),
-      monthlyDuration: FINANCING.months,
+      monthlyAmount: monthlyPaymentForAmount(balance, { annualRate: rules.annualRate, months: rules.months }),
+      monthlyDuration: rules.months,
       balanceAmount: balance,
     }
   }
 
   if (paymentPlan === 'DEPOSIT') {
-    const depositAmount = Math.round(totalPrice * FINANCING.depositPlanRate)
+    const depositAmount = Math.round(totalPrice * rules.depositPlanRate)
     return {
       ...base,
       depositAmount,
@@ -69,7 +83,7 @@ export function calculateOrderTotals({ price, paymentPlan = 'FULL' }) {
   return { ...base, depositAmount: 0, monthlyAmount: 0, monthlyDuration: 0, balanceAmount: 0 }
 }
 
-function paymentRows(totals, createdAt) {
+export function paymentRows(totals, createdAt) {
   const transfer = (amount, installmentNumber, installmentType, dueDate = null) => ({
     type: 'TRANSFER',
     status: 'PENDING',
@@ -79,8 +93,9 @@ function paymentRows(totals, createdAt) {
     dueDate,
   })
 
-  if (totals.balanceAmount === 0) {
-    return [transfer(totals.totalPrice, 1, 'FULL')]
+  const isFullPayment = totals.depositAmount === 0 && totals.monthlyDuration === 0
+  if (isFullPayment) {
+    return [transfer(totals.amountDue ?? totals.totalPrice, 1, 'FULL')]
   }
 
   const rows = [transfer(totals.depositAmount, 1, 'CUSTOM')]
@@ -102,11 +117,33 @@ export function toPaymentDTO(payment) {
     amount: payment.amount,
     dueDate: toIso(payment.dueDate),
     installmentNumber: payment.installmentNumber ?? null,
+    installmentType: payment.installmentType ?? null,
   }
 }
 
+/** Les anciennes commandes n'ont pas de snapshot : on leur garde leurs règles. */
+function totalsForOrder(order) {
+  const snapshot = order.paymentSnapshot
+  if (snapshot && typeof snapshot === 'object' && Number.isFinite(Number(snapshot.amountDue))) {
+    return {
+      totalPrice: Number(snapshot.totalPrice ?? order.totalPrice),
+      discountAmount: Number(snapshot.discountAmount ?? 0),
+      amountDue: Number(snapshot.amountDue),
+      depositAmount: Number(snapshot.depositAmount ?? 0),
+      monthlyAmount: Number(snapshot.monthlyAmount ?? 0),
+      monthlyDuration: Number(snapshot.monthlyDuration ?? 0),
+      balanceAmount: Number(snapshot.balanceAmount ?? 0),
+    }
+  }
+  return calculateOrderTotals({
+    price: order.totalPrice,
+    paymentPlan: order.paymentPlan,
+    rules: LEGACY_FINANCING,
+  })
+}
+
 export function toOrderDTO(order) {
-  const totals = calculateOrderTotals({ price: order.totalPrice, paymentPlan: order.paymentPlan })
+  const totals = totalsForOrder(order)
   return {
     id: order.id,
     orderNumber: order.orderNumber,
@@ -125,7 +162,9 @@ export function toOrderDTO(order) {
     paymentType: PAYMENT_TYPE_BY_PLAN[order.paymentPlan] ?? 'full',
     totalPrice: totals.totalPrice,
     discountAmount: totals.discountAmount,
+    amountDue: totals.amountDue,
     depositAmount: totals.depositAmount,
+    balanceAmount: totals.balanceAmount,
     monthlyAmount: totals.monthlyAmount,
     monthlyDuration: totals.monthlyDuration,
     paymentReference: order.orderNumber,
@@ -190,6 +229,7 @@ export async function createOrder(data, car, userId = null) {
             deliveryType: data.deliveryType,
             paymentPlan,
             totalPrice: totals.totalPrice,
+            paymentSnapshot: totals,
             paymentBeneficiary: bank.beneficiary || null,
             paymentIban: bank.iban || null,
             paymentBic: bank.bic || null,

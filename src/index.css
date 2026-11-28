@@ -421,6 +421,9 @@ fieldset legend { margin-bottom: 14px; color: var(--acid); font-size: 13px; lett
 .order-summary dl { display: grid; gap: 12px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); }
 .order-summary dt { color: var(--muted); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
 .order-summary dd { margin-top: 4px; font-size: 16px; }
+.payment-preview { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); }
+.payment-preview .eyebrow { margin-bottom: 6px; color: var(--acid); }
+.payment-preview dl { margin-top: 12px; }
 .order-summary-note { line-height: 1.6; }
 .order-confirm-card { display: flex; flex-direction: column; align-items: center; gap: 16px; max-width: 680px; margin-inline: auto; text-align: center; }
 .order-confirm-card > svg { color: var(--acid); }

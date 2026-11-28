@@ -3,6 +3,14 @@ import { ArrowLeft, ShieldCheck } from 'lucide-react'
 import { useVehicles } from '../context/VehiclesContext'
 import type { Navigate } from '../hooks/useRoute'
 import { apiFetch, errorMessage } from '../lib/api'
+import {
+  FINANCING_MONTHS,
+  estimateDeposit,
+  estimateFullAmount,
+  estimateFullDiscount,
+  estimateMonthly,
+  estimateMonthlyDownPayment,
+} from '../lib/finance'
 import { formatEuro } from '../lib/format'
 import type { OrderDTO } from '../types/features'
 
@@ -107,6 +115,33 @@ export default function Commander({ id, navigate }: { id: string; navigate: Navi
     )
   }
 
+  const price = Number(vehicle.price) || 0
+  const paymentSummary =
+    values.paymentType === 'deposit'
+      ? {
+          label: 'Acompte 25 % · solde à la livraison',
+          rows: [
+            ['Acompte à la commande', formatEuro(estimateDeposit(price))],
+            ['Solde à la livraison', formatEuro(price - estimateDeposit(price))],
+          ],
+        }
+      : values.paymentType === 'monthly'
+        ? {
+            label: 'Mensualités · apport 15 %',
+            rows: [
+              ['Apport à la commande', formatEuro(estimateMonthlyDownPayment(price))],
+              ['Mensualité estimée', `${formatEuro(estimateMonthly(price))} / mois`],
+              ['Durée', `${FINANCING_MONTHS} mois`],
+            ],
+          }
+        : {
+            label: 'Paiement intégral · remise 5 %',
+            rows: [
+              ['Remise', `-${formatEuro(estimateFullDiscount(price))}`],
+              ['Montant à payer', formatEuro(estimateFullAmount(price))],
+            ],
+          }
+
   return (
     <div className="page shell checkout-page">
       <a className="back-link" href={`/vehicule/${encodeURIComponent(vehicle.id)}`}>
@@ -151,9 +186,9 @@ export default function Commander({ id, navigate }: { id: string; navigate: Navi
             </label>
             <label>Paiement
               <select value={values.paymentType} onChange={update('paymentType')}>
-                <option value="full">Paiement intégral</option>
-                <option value="deposit">Acompte</option>
-                <option value="monthly">Mensualités</option>
+                <option value="full">Paiement intégral — remise 5 %</option>
+                <option value="deposit">Acompte 25 % — solde à la livraison</option>
+                <option value="monthly">Mensualités — apport 15 %</option>
               </select>
             </label>
             <label className="form-wide">Notes <span className="optional">(facultatif)</span>
@@ -181,6 +216,14 @@ export default function Commander({ id, navigate }: { id: string; navigate: Navi
             <div><dt>Prix affiché</dt><dd>{formatEuro(vehicle.price)}</dd></div>
             <div><dt>Garantie</dt><dd>{vehicle.warranty}</dd></div>
           </dl>
+          <div className="payment-preview">
+            <p className="eyebrow">{paymentSummary.label}</p>
+            <dl>
+              {paymentSummary.rows.map(([label, value]) => (
+                <div key={label}><dt>{label}</dt><dd>{value}</dd></div>
+              ))}
+            </dl>
+          </div>
           <p className="order-summary-note">Le montant définitif, les échéances et les coordonnées bancaires sont communiqués après validation de la commande par l’équipe.</p>
         </aside>
       </div>

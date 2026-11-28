@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import { orderAdminMail, orderCustomerMail, orderRecipient } from '../server/lib/mailer.js'
+import { calculateOrderTotals } from '../server/lib/orders.js'
 
 const order = {
   id: 'order_1',
@@ -18,7 +19,10 @@ const order = {
   purchaseType: 'ACHAT',
   deliveryType: 'LIVRAISON',
   totalPrice: 27900,
+  discountAmount: 0,
+  amountDue: 27900,
   depositAmount: 8370,
+  balanceAmount: 19530,
   monthlyAmount: 0,
   monthlyDuration: 0,
   paymentBeneficiary: 'AUTO GL SRLS',
@@ -26,6 +30,10 @@ const order = {
   paymentBic: 'BPMOIT22',
   items: [{ name: 'AUTO GL Studio Silver', version: 'Série 01' }],
 }
+
+const fullOrder = { ...order, ...calculateOrderTotals({ price: 27900, paymentPlan: 'FULL' }) }
+const depositOrder = { ...order, ...calculateOrderTotals({ price: 27900, paymentPlan: 'DEPOSIT' }) }
+const monthlyOrder = { ...order, ...calculateOrderTotals({ price: 27900, paymentPlan: 'MONTHLY' }) }
 
 test('le mail client confirme la commande avec le véhicule, le montant et le suivi', () => {
   const mail = orderCustomerMail(order)
@@ -36,6 +44,23 @@ test('le mail client confirme la commande avec le véhicule, le montant et le su
   assert.match(mail.text, /IBAN : IT60X0542811101000000123456/)
   assert.match(mail.text, /\/suivi\/AGL-20261125-ABC123/)
   assert.doesNotMatch(mail.text, /<[a-z]+>/i)
+})
+
+test('le mail détaille la remise de 5 % du paiement intégral', () => {
+  const mail = orderCustomerMail(fullOrder)
+  assert.match(mail.text, /Remise : -1\s?395\s?€/)
+  assert.match(mail.text, /Montant à payer : 26\s?505\s?€/)
+  assert.match(mail.text, /26\s?505\s?€ en totalité, remise de 5 % appliquée/)
+})
+
+test('le mail précise le solde à la livraison pour l’acompte de 25 %', () => {
+  const mail = orderCustomerMail(depositOrder)
+  assert.match(mail.text, /6\s?975\s?€ d'acompte \(25 %\), puis 20\s?925\s?€ à la livraison/)
+})
+
+test('le mail précise l’apport de 15 % et les 60 mensualités', () => {
+  const mail = orderCustomerMail(monthlyOrder)
+  assert.match(mail.text, /4\s?185\s?€ à la commande \(15 %\), puis 60 mensualités de/)
 })
 
 test('le mail admin notifie la nouvelle commande au destinataire configuré', () => {

@@ -81,13 +81,22 @@ function vehicleLabel(order) {
 }
 
 function paymentLabel(order) {
+  const due = Number(order.amountDue ?? order.totalPrice)
+  const rate = (amount) => {
+    const base = Number(order.totalPrice)
+    return base > 0 ? Math.round((Number(amount) / base) * 100) : 0
+  }
   if (order.monthlyAmount > 0 && order.monthlyDuration > 0) {
-    return `${formatEuro(order.depositAmount)} à la commande, puis ${order.monthlyDuration} mensualités de ${formatEuro(order.monthlyAmount)}`
+    return `${formatEuro(order.depositAmount)} à la commande (${rate(order.depositAmount)} %), puis ${order.monthlyDuration} mensualités de ${formatEuro(order.monthlyAmount)}`
   }
   if (order.depositAmount > 0) {
-    return `${formatEuro(order.depositAmount)} d'acompte, puis ${formatEuro(Number(order.totalPrice) - Number(order.depositAmount))} à régler`
+    const balance = Number(order.balanceAmount ?? due - Number(order.depositAmount))
+    return `${formatEuro(order.depositAmount)} d'acompte (${rate(order.depositAmount)} %), puis ${formatEuro(balance)} à la livraison`
   }
-  return `${formatEuro(order.totalPrice)} en totalité`
+  if (Number(order.discountAmount) > 0) {
+    return `${formatEuro(due)} en totalité, remise de ${rate(order.discountAmount)} % appliquée`
+  }
+  return `${formatEuro(due)} en totalité`
 }
 
 function deliveryLabel(order) {
@@ -97,6 +106,7 @@ function deliveryLabel(order) {
 
 /** E-mail envoyé au client, à la création ou lors d'un changement de statut. */
 export function orderCustomerMail(order, { statusChanged = false, note } = {}) {
+  const due = Number(order.amountDue ?? order.totalPrice)
   const lines = [
     `Bonjour ${order.customerName},`,
     '',
@@ -105,7 +115,9 @@ export function orderCustomerMail(order, { statusChanged = false, note } = {}) {
       : `Merci pour votre commande ${order.orderNumber}. Elle est bien enregistrée auprès d'AUTO GL SRLS.`,
     '',
     `Véhicule : ${vehicleLabel(order)}`,
-    `Montant : ${formatEuro(order.totalPrice)}`,
+    `Prix du véhicule : ${formatEuro(order.totalPrice)}`,
+    ...(Number(order.discountAmount) > 0 ? [`Remise : -${formatEuro(order.discountAmount)}`] : []),
+    `Montant à payer : ${formatEuro(due)}`,
     `Règlement : ${paymentLabel(order)}`,
     deliveryLabel(order),
   ]
@@ -140,6 +152,7 @@ export function orderCustomerMail(order, { statusChanged = false, note } = {}) {
 
 /** E-mail interne envoyé à l'équipe dès qu'une commande est créée. */
 export function orderAdminMail(order) {
+  const due = Number(order.amountDue ?? order.totalPrice)
   const lines = [
     'Nouvelle commande reçue sur AUTO GL SRLS.',
     '',
@@ -155,7 +168,9 @@ export function orderAdminMail(order) {
     '',
     'Véhicule et règlement',
     vehicleLabel(order),
-    `Montant : ${formatEuro(order.totalPrice)}`,
+    `Prix du véhicule : ${formatEuro(order.totalPrice)}`,
+    ...(Number(order.discountAmount) > 0 ? [`Remise : -${formatEuro(order.discountAmount)}`] : []),
+    `Montant à payer : ${formatEuro(due)}`,
     `Règlement : ${paymentLabel(order)}`,
     `Achat : ${order.purchaseType} — ${order.deliveryType}`,
   ]

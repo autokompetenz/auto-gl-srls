@@ -152,10 +152,13 @@ les `Payment[]` du plan dans **une seule transaction**. `isSold` n'est **pas** m
 
 Plans de paiement (calcul centralisé dans `calculateOrderTotals`) :
 
-- `full` : un paiement `TRANSFER` du prix total, `depositAmount = 0`.
-- `deposit` : acompte de 30 % + solde de 70 %, deux paiements `CUSTOM`.
-- `monthly` : apport de 25 %, 60 mensualités à 6 %/an (taux mensuel 0,5 %),
-  premier paiement `CUSTOM` puis 60 paiements `MONTHLY` échelonnés.
+- `full` : remise de 5 %, un seul paiement `TRANSFER` du montant réduit (`amountDue`).
+- `deposit` : acompte de 25 % à la commande, solde de 75 % à la livraison, deux paiements `CUSTOM`.
+- `monthly` : apport de 15 % à la commande, 60 mensualités à 6 %/an (taux mensuel 0,5 %)
+  sur les 85 % restants, premier paiement `CUSTOM` puis 60 paiements `MONTHLY` échelonnés.
+
+Les montants sont figés dans `paymentSnapshot` à la création : les commandes anciennes
+gardent leurs règles d'origine.
 
 `OrderDTO` :
 
@@ -177,8 +180,10 @@ Plans de paiement (calcul centralisé dans `calculateOrderTotals`) :
   "deliveryType": "LIVRAISON",
   "paymentType": "full",
   "totalPrice": 27900,
-  "discountAmount": 0,
+  "discountAmount": 1395,
+  "amountDue": 26505,
   "depositAmount": 0,
+  "balanceAmount": 0,
   "monthlyAmount": 0,
   "monthlyDuration": 0,
   "paymentReference": "AGL-20261124-1A2B3C",
@@ -188,13 +193,14 @@ Plans de paiement (calcul centralisé dans `calculateOrderTotals`) :
   "paymentTransferType": "Virement",
   "items": [{ "vehicleId": "...", "name": "...", "version": "...", "image": "...", "quantity": 1, "unitPrice": 27900 }],
   "tracking": [{ "status": "PENDING", "note": "Commande reçue", "createdAt": "..." }],
-  "payments": [{ "id": "...", "type": "TRANSFER", "status": "PENDING", "amount": 27900, "dueDate": null, "installmentNumber": 1 }]
+  "payments": [{ "id": "...", "type": "TRANSFER", "status": "PENDING", "amount": 26505, "dueDate": null, "installmentNumber": 1, "installmentType": "FULL" }]
 }
 ```
 
 `paymentType` est dérivé de `order.paymentPlan`. `paymentReference` reprend le numéro
-de commande (aucune colonne dédiée dans le schéma). `discountAmount` vaut 0 : le schéma
-ne prévoit pas de remise persistée. Les coordonnées bancaires sont figées sur la commande
+de commande (aucune colonne dédiée dans le schéma). `discountAmount` et `amountDue`
+sont calculés à la création puis figés dans `paymentSnapshot` ; la remise de 5 % ne
+s'applique qu'au plan `full`. Les coordonnées bancaires sont figées sur la commande
 au moment de sa création ; elles proviennent de l'enregistrement admin en base (champs
 vides si aucune saisie n'a encore été faite), jamais de variables d'environnement.
 
@@ -265,13 +271,13 @@ Une seule implémentation du calcul, partagée avec les plans `monthly` :
 maxMonthly        = salary × 0,30
 taux mensuel      = 6 % / 12 = 0,5 %
 facteur annuité   = r / (1 - (1+r)^-60)
-maxAffordablePrice= floor(maxMonthly / (0,75 × facteur))
-mensualité        = round((prix × 0,75) × facteur)
+maxAffordablePrice= floor(maxMonthly / (0,85 × facteur))
+mensualité        = round((prix × 0,85) × facteur)
 ```
 
 `count` est le nombre de véhicules actifs dont le prix est <= `maxAffordablePrice`.
 `charges`, `credit` et `downPayment` sont acceptés pour compatibilité client mais la
-capacité reste la règle affichée (30 % du salaire, apport 25 %).
+capacité reste la règle affichée (30 % du salaire, apport 15 %).
 
 ## 9. Contact et banque
 

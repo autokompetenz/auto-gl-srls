@@ -4,7 +4,7 @@ import VehicleCard from '../components/VehicleCard'
 import type { Compare } from '../hooks/useCompare'
 import type { Favorites } from '../hooks/useFavorites'
 import { apiFetch, errorMessage } from '../lib/api'
-import { FINANCING_MONTHS, MONTHLY_INCOME_RATIO } from '../lib/finance'
+import { DOWN_PAYMENT_RATE, FINANCING_MONTHS, MONTHLY_INCOME_RATIO } from '../lib/finance'
 import { formatEuro } from '../lib/format'
 import type { SimulationResult } from '../types/features'
 
@@ -109,7 +109,7 @@ export default function Simulation({ favorites, compare }: { favorites: Favorite
             </label>
           </div>
           <p className="form-context">
-            Hypothèse du serveur : capacité de {Math.round(MONTHLY_INCOME_RATIO * 100)} % du salaire, apport de 25 %, {FINANCING_MONTHS} mensualités à 6 % annuel.
+            Hypothèse du serveur : capacité de {Math.round(MONTHLY_INCOME_RATIO * 100)} % du salaire, apport de {Math.round(DOWN_PAYMENT_RATE * 100)} %, {FINANCING_MONTHS} mensualités à 6 % annuel.
           </p>
           <div className="form-actions">
             <button type="submit" className="btn btn-primary" disabled={status === 'loading'}>

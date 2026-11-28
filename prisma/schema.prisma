@@ -205,6 +205,7 @@ model Order {
   deliveryType        DeliveryType  @default(LIVRAISON)
   paymentPlan         PaymentPlan   @default(FULL)
   totalPrice          Int
+  paymentSnapshot     Json?
   currency            String        @default("EUR")
   status              OrderStatus   @default(PENDING)
   paymentBeneficiary  String?
