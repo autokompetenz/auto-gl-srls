@@ -13,6 +13,7 @@
   --on-acid: #10190c;
   --line: #ffffff30;
   --gutter: clamp(20px, 4vw, 72px);
+  color-scheme: dark;
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 400;
   color: var(--white);
@@ -315,6 +316,15 @@ input[type='range'] { width: 100%; accent-color: var(--acid); }
 .filter-chips li { padding: 6px 10px; border: 1px solid var(--line); border-radius: 999px; background: #ffffff0d; color: var(--muted); font-size: 12px; }
 
 input, select, textarea { background: #ffffff0d; }
+select, option { color-scheme: dark; }
+option { background: var(--panel); color: var(--white); }
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--white);
+  -webkit-box-shadow: 0 0 0 1000px #35586e inset;
+  caret-color: var(--white);
+}
 .order-form input, .order-form select, .order-form textarea,
 .simulation-form input, .simulation-form select,
 .tracking-form input, .account-form input,
