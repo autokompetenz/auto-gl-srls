@@ -1,4 +1,4 @@
-import { ArrowRight, Search, MessageCircle, ClipboardCheck, CreditCard, ShieldCheck, Landmark, Wrench, Truck, Mail, Phone, MapPin, CarFront, RefreshCw, type LucideIcon } from 'lucide-react'
+import { ArrowRight, Search, MessageCircle, ClipboardCheck, CreditCard, ShieldCheck, Landmark, Wrench, Truck, Mail, Phone, MapPin, CarFront, RefreshCw, Star, type LucideIcon } from 'lucide-react'
 import VehicleCard from '../components/VehicleCard'
 import { useVehicles } from '../context/VehiclesContext'
 import type { Compare } from '../hooks/useCompare'
@@ -70,6 +70,29 @@ const faqs = [
   {
     question: 'Comment puis-je suivre ma commande ?',
     answer: 'Rendez-vous sur la page « Suivre une commande », puis saisissez votre numéro de commande et l’adresse email utilisée lors de l’achat. Vous recevez également chaque étape par email.',
+  },
+]
+
+const reviews = [
+  {
+    name: 'Marco R.',
+    context: 'Achat d’un véhicule d’occasion',
+    quote: 'Processus très clair du début à la fin. J’ai reçu mon bon de commande par email et suivi chaque étape jusqu’à la livraison.',
+  },
+  {
+    name: 'Sophie L.',
+    context: 'Véhicule livré à domicile',
+    quote: 'Le véhicule correspondait exactement à la fiche : photos, historique et équipements détaillés. Aucune surprise à la remise.',
+  },
+  {
+    name: 'Thomas B.',
+    context: 'Financement auto',
+    quote: 'Le devis est arrivé rapidement avec toutes les options et le financement expliqué. Une équipe réactive et transparente.',
+  },
+  {
+    name: 'Elena M.',
+    context: 'Reprise & livraison',
+    quote: 'Voiture préparée avec soin, documents en ordre et transport organisé jusque chez moi. Je recommande sans hésiter.',
   },
 ]
 
@@ -163,6 +186,32 @@ export default function Home({ favorites, compare }: { favorites: Favorites; com
               <div className="service-icon"><service.icon size={23} aria-hidden="true" /></div>
               <h3>{service.title}</h3>
               <p>{service.text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="shell section reviews-section">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow">Avis clients</p>
+            <h2>Ce qu’ils disent de nous</h2>
+            <p className="reviews-lead">Des retours sur le choix du véhicule, le financement et la livraison.</p>
+          </div>
+        </div>
+        <div className="reviews-grid">
+          {reviews.map(review => (
+            <article className="review-card" key={review.name}>
+              <div className="review-stars" aria-label="Note 5 sur 5">
+                {Array.from({ length: 5 }, (_, index) => (
+                  <Star key={index} size={16} fill="currentColor" aria-hidden="true" />
+                ))}
+              </div>
+              <p className="review-quote">« {review.quote} »</p>
+              <div className="review-author">
+                <strong>{review.name}</strong>
+                <span>{review.context}</span>
+              </div>
             </article>
           ))}
         </div>

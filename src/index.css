@@ -115,7 +115,7 @@ main { flex: 1; }
 .card-link:hover { color: var(--acid); }
 
 /* Steps */
-.steps-lead, .services-lead, .faq-lead { max-width: 70ch; margin-top: 12px; color: var(--muted); font-size: 16px; line-height: 1.6; }
+.steps-lead, .services-lead, .faq-lead, .reviews-lead { max-width: 70ch; margin-top: 12px; color: var(--muted); font-size: 16px; line-height: 1.6; }
 .steps-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 .step-card { position: relative; padding: 26px; border: 1px solid var(--line); border-radius: 16px; background: #ffffff0a; }
 .step-icons { display: flex; align-items: center; gap: 8px; }
@@ -132,6 +132,15 @@ main { flex: 1; }
 .service-card svg { color: var(--acid); }
 .service-card h3 { margin-top: 16px; font-size: 18px; }
 .service-card p { margin-top: 10px; font-size: 14px; line-height: 1.6; color: var(--muted); }
+
+/* Avis clients */
+.reviews-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.review-card { display: flex; flex-direction: column; gap: 14px; padding: 26px; border: 1px solid var(--line); border-radius: 16px; background: #ffffff0a; }
+.review-stars { display: flex; gap: 3px; color: var(--acid); }
+.review-quote { margin: 0; color: var(--white); font-size: 15px; line-height: 1.7; }
+.review-author { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 14px; margin-top: auto; padding-top: 16px; border-top: 1px solid var(--line); }
+.review-author strong { font-size: 14px; }
+.review-author span { color: var(--muted); font-size: 12px; }
 
 /* FAQ */
 .faq-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
@@ -531,7 +540,7 @@ fieldset legend { margin-bottom: 14px; color: var(--acid); font-size: 13px; lett
   .hero { grid-template-columns: 1fr; gap: 44px; }
   .hero-visual { max-width: 640px; }
   .vehicle-grid, .steps-grid, .services-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .faq-list { grid-template-columns: 1fr; }
+  .faq-list, .reviews-grid { grid-template-columns: 1fr; }
   .simulation-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .simulation-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .stepper { gap: 4px; }
