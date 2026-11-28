@@ -115,7 +115,7 @@ main { flex: 1; }
 .card-link:hover { color: var(--acid); }
 
 /* Steps */
-.steps-lead, .services-lead { max-width: 70ch; margin-top: 12px; color: var(--muted); font-size: 16px; line-height: 1.6; }
+.steps-lead, .services-lead, .faq-lead { max-width: 70ch; margin-top: 12px; color: var(--muted); font-size: 16px; line-height: 1.6; }
 .steps-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 .step-card { position: relative; padding: 26px; border: 1px solid var(--line); border-radius: 16px; background: #ffffff0a; }
 .step-icons { display: flex; align-items: center; gap: 8px; }
@@ -132,6 +132,17 @@ main { flex: 1; }
 .service-card svg { color: var(--acid); }
 .service-card h3 { margin-top: 16px; font-size: 18px; }
 .service-card p { margin-top: 10px; font-size: 14px; line-height: 1.6; color: var(--muted); }
+
+/* FAQ */
+.faq-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.faq-item { overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: #ffffff0a; }
+.faq-item summary { display: flex; align-items: center; gap: 14px; padding: 20px 22px; cursor: pointer; list-style: none; font-weight: 600; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-number { color: var(--acid); font-size: 12px; letter-spacing: .1em; }
+.faq-question { flex: 1; }
+.faq-item summary::after { content: '+'; color: var(--acid); font-size: 22px; line-height: 1; }
+.faq-item[open] summary::after { content: '−'; }
+.faq-item p { margin: 0; padding: 0 22px 22px 58px; color: var(--muted); font-size: 14px; line-height: 1.7; }
 
 /* Page head and catalogue */
 .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 36px; }
@@ -520,6 +531,7 @@ fieldset legend { margin-bottom: 14px; color: var(--acid); font-size: 13px; lett
   .hero { grid-template-columns: 1fr; gap: 44px; }
   .hero-visual { max-width: 640px; }
   .vehicle-grid, .steps-grid, .services-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .faq-list { grid-template-columns: 1fr; }
   .simulation-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .simulation-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .stepper { gap: 4px; }
@@ -534,6 +546,7 @@ fieldset legend { margin-bottom: 14px; color: var(--acid); font-size: 13px; lett
   .hero-tag { left: 0; }
   .section-head, .page-head { align-items: flex-start; flex-direction: column; }
   .vehicle-grid, .catalogue-grid, .steps-grid, .services-grid, .related-grid { grid-template-columns: 1fr; }
+  .faq-item p { padding-left: 22px; }
 
   /* Filtres repliés par défaut pour laisser respirer les annonces. */
   .filters-head { flex-wrap: wrap; margin-bottom: 0; }

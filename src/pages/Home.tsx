@@ -39,11 +39,38 @@ const steps: { icons: LucideIcon[]; title: string; text: string }[] = [
 
 const services: { icon: LucideIcon; badge: string; title: string; text: string }[] = [
   { icon: CarFront, badge: '2024 Models', title: 'Voitures Neuves', text: 'Derniers modèles, garantie constructeur, financement personnalisé.' },
-  { icon: Wrench, badge: 'Certified', title: 'Voitures d’Occasion', text: 'Véhicules vérifiés, historique complet, garantie jusqu’à 24 mois.' },
+  { icon: Wrench, badge: 'Certified', title: 'Voitures d’Occasion', text: 'Véhicules vérifiés, historique complet, garantie jusqu’à 36 mois.' },
   { icon: CreditCard, badge: 'Fast Approval', title: 'Financement Auto', text: 'Crédit sur mesure, taux avantageux, réponse en 24h.' },
   { icon: RefreshCw, badge: 'Best Value', title: 'Reprise & Échange', text: 'Reprise de votre véhicule actuel, estimation gratuite.' },
   { icon: ShieldCheck, badge: 'Full Coverage', title: 'Garantie & SAV', text: 'Garantie étendue, service après-vente, assistance 24/7.' },
   { icon: Truck, badge: 'Door to Door', title: 'Livraison & Transport', text: 'Livraison à domicile, transport sécurisé, partout dans le monde entier.' },
+]
+
+const faqs = [
+  {
+    question: 'Vos véhicules sont-ils garantis ?',
+    answer: 'Oui, absolument. Chaque véhicule vendu est couvert par notre garantie AUTO GL SRLS d’au moins 12 mois ou 10 000 km, incluant la protection moteur et boîte de vitesse. Des extensions jusqu’à 36 mois sont disponibles à la commande.',
+  },
+  {
+    question: 'Proposez-vous du financement ?',
+    answer: 'Oui. Nous étudions votre projet avec nos partenaires bancaires et vous présentons une réponse de principe sous 24h, avec des taux compétitifs et des conditions clairement expliquées avant signature.',
+  },
+  {
+    question: 'Comment fonctionne la livraison ?',
+    answer: 'Nous organisons un transport sécurisé jusqu’à votre domicile, partout dans le monde entier. Vous recevez un numéro de commande pour suivre chaque étape, et les documents sont remis en main propre lors de la livraison.',
+  },
+  {
+    question: 'Puis-je reprendre mon ancien véhicule ?',
+    answer: 'Oui. Transmettez-nous les informations de votre véhicule actuel via le formulaire de contact : nous vous envoyons une estimation gratuite et sans engagement, puis nous vous proposons une reprise ou un échange.',
+  },
+  {
+    question: 'Les véhicules ont-ils été accidentés ?',
+    answer: 'Chaque fiche présente l’historique connu et le rapport d’inspection. Les éléments importants sont indiqués avant la commande, afin que vous sachiez exactement ce que vous achetez.',
+  },
+  {
+    question: 'Comment puis-je suivre ma commande ?',
+    answer: 'Rendez-vous sur la page « Suivre une commande », puis saisissez votre numéro de commande et l’adresse email utilisée lors de l’achat. Vous recevez également chaque étape par email.',
+  },
 ]
 
 export default function Home({ favorites, compare }: { favorites: Favorites; compare: Compare }) {
@@ -63,7 +90,7 @@ export default function Home({ favorites, compare }: { favorites: Favorites; com
           </div>
           <dl className="hero-stats">
             <div><dt>{vehicles.length}</dt><dd>véhicules en stock</dd></div>
-            <div><dt>6 mois</dt><dd>garantie minimale</dd></div>
+            <div><dt>12 mois</dt><dd>garantie minimale</dd></div>
             <div><dt>EUR</dt><dd>prix affichés</dd></div>
           </dl>
         </div>
@@ -137,6 +164,27 @@ export default function Home({ favorites, compare }: { favorites: Favorites; com
               <h3>{service.title}</h3>
               <p>{service.text}</p>
             </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="shell section faq-section">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow">Pourquoi nous choisir ?</p>
+            <h2>Vos questions, nos réponses</h2>
+            <p className="faq-lead">Tout ce que vous devez savoir avant de passer commande. Une question ? Notre équipe est disponible 24/7.</p>
+          </div>
+        </div>
+        <div className="faq-list">
+          {faqs.map((faq, index) => (
+            <details className="faq-item" key={faq.question} open={index === 0}>
+              <summary>
+                <span className="faq-number">{String(index + 1).padStart(2, '0')}</span>
+                <span className="faq-question">{faq.question}</span>
+              </summary>
+              <p>{faq.answer}</p>
+            </details>
           ))}
         </div>
       </section>
