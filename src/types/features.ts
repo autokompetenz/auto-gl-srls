@@ -1,4 +1,5 @@
 import type { Vehicle } from '../data/vehicles'
+import type { Locale } from '../i18n'
 
 export type UserRole = 'CUSTOMER' | 'ADMIN'
 
@@ -65,6 +66,7 @@ export type OrderDTO = {
   postalCode: string
   city: string
   country: string | null
+  locale: Locale
   notes: string | null
   purchaseType: string
   deliveryType: string
@@ -102,6 +104,7 @@ export type AlertDTO = {
   token: string
   email: string
   name: string | null
+  locale: Locale
   filters: AlertFilters
   active: boolean
   notifiedCount: number

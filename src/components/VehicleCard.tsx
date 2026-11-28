@@ -1,6 +1,7 @@
 import { Heart, MapPin, ArrowUpRight } from 'lucide-react'
 import type { Vehicle } from '../data/vehicles'
 import { formatEuro, formatKm } from '../lib/format'
+import { T } from '../i18n'
 
 export default function VehicleCard({
   vehicle,
@@ -16,6 +17,7 @@ export default function VehicleCard({
   onToggleCompare?: (id: string) => void
 }) {
   return (
+    <T>
     <article className="vehicle-card">
       <a className="vehicle-media" href={`/vehicule/${vehicle.id}`} aria-label={`Voir ${vehicle.name}`}>
         <img src={vehicle.image} alt={`${vehicle.name} ${vehicle.color}`} loading="lazy" />
@@ -67,5 +69,6 @@ export default function VehicleCard({
         </div>
       </div>
     </article>
+    </T>
   )
 }

@@ -6,6 +6,7 @@ import type { Favorites } from '../hooks/useFavorites'
 import { apiFetch, errorMessage } from '../lib/api'
 import { DOWN_PAYMENT_RATE, FINANCING_MONTHS, MONTHLY_INCOME_RATIO } from '../lib/finance'
 import { formatEuro } from '../lib/format'
+import { T } from '../i18n'
 import type { SimulationResult } from '../types/features'
 
 type Status = 'idle' | 'loading' | 'done' | 'error'
@@ -56,6 +57,7 @@ export default function Simulation({ favorites, compare }: { favorites: Favorite
   }
 
   return (
+    <T>
     <div className="page shell simulation-page">
       <div className="page-head">
         <div>
@@ -174,5 +176,6 @@ export default function Simulation({ favorites, compare }: { favorites: Favorite
         </section>
       </div>
     </div>
+    </T>
   )
 }

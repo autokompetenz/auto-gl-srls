@@ -3,12 +3,14 @@ import VehicleCard from '../components/VehicleCard'
 import { useVehicles } from '../context/VehiclesContext'
 import type { Compare } from '../hooks/useCompare'
 import type { Favorites } from '../hooks/useFavorites'
+import { T } from '../i18n'
 
 export default function Favorites({ favorites, compare }: { favorites: Favorites; compare: Compare }) {
   const { vehicleById } = useVehicles()
   const saved = favorites.ids.map(vehicleById).filter((vehicle): vehicle is NonNullable<typeof vehicle> => Boolean(vehicle))
 
   return (
+    <T>
     <div className="page shell favorites-page">
       <div className="page-head">
         <div>
@@ -43,5 +45,6 @@ export default function Favorites({ favorites, compare }: { favorites: Favorites
         </div>
       )}
     </div>
+    </T>
   )
 }

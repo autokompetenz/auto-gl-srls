@@ -35,10 +35,13 @@ dans l'espace admin (`/admin/parametres`) via `PUT /api/admin/bank` et stockées
 | `PORT` | Port de l'API, 3001 par défaut |
 | `APP_URL` | Origine autorisée par CORS et lien dans les e-mails d'alerte |
 | `ADMIN_CODE_HASH` | Hash bcrypt du code d'accès admin (jamais le code en clair) |
-| `ADMIN_EMAIL` | Facultatif : choisit le compte admin associé au code (sinon le premier admin créé) |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | Envoi d'e-mails (optionnel) |
 | `FROM_EMAIL`, `FROM_NAME`, `LEADS_EMAIL` | Expéditeur et destinataire des messages de contact |
 | `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` | Upload d'images |
+
+Il n'existe aucun e-mail ni mot de passe admin : l'accès à `/admin` se fait uniquement
+par le code vérifié contre `ADMIN_CODE_HASH`. Les coordonnées bancaires sont saisies
+dans l'admin et stockées en base, jamais dans l'environnement.
 
 SMTP et Cloudinary sont **optionnels** : sans SMTP, les e-mails sont journalisés en
 avertissement et les requêtes réussissent quand même ; sans Cloudinary, `POST /admin/uploads`
@@ -137,6 +140,7 @@ Corps de création :
   "postalCode": "69003",
   "city": "Lyon",
   "country": "France",
+  "locale": "it",
   "notes": "...",
   "purchaseType": "ACHAT",
   "deliveryType": "LIVRAISON",
@@ -145,7 +149,8 @@ Corps de création :
 ```
 
 `purchaseType` : `ACHAT|LOCATION` ; `deliveryType` : `LIVRAISON|RETRAIT` ;
-`paymentType` : `full|deposit|monthly` (converti en `PaymentPlan` `FULL|DEPOSIT|MONTHLY`).
+`paymentType` : `full|deposit|monthly` (converti en `PaymentPlan` `FULL|DEPOSIT|MONTHLY`) ;
+`locale` : `it|fr|en|de|es` (italien par défaut), utilisée pour les e-mails.
 Le numéro `AGL-AAAAMMJJ-XXXXXX` est généré en boucle jusqu'à obtenir une valeur unique. La création
 écrit `Order`, `OrderItem` (snapshot du véhicule), `OrderTracking` initial (`PENDING`) et
 les `Payment[]` du plan dans **une seule transaction**. `isSold` n'est **pas** modifié.
@@ -245,7 +250,8 @@ Une note crée une entrée de suivi.
 
 À la création (`POST /api/orders`), deux e-mails sont envoyés et **awaités** avant
 la réponse : une confirmation au client (`customerEmail`) et une notification à
-l'équipe (`LEADS_EMAIL`, puis `ADMIN_EMAIL`, puis `FROM_EMAIL`). Le champ `emails`
+l'équipe (`LEADS_EMAIL`, puis `FROM_EMAIL`). Les deux messages suivent la `locale`
+de la commande ; l'EUR reste inchangé dans toutes les langues. Le champ `emails`
 de la réponse indique quels envois ont été acceptés par le serveur SMTP. Une panne
 SMTP est journalisée et ne fait jamais échouer la création de la commande.
 
@@ -290,8 +296,10 @@ capacité reste la règle affichée (30 % du salaire, apport 15 %).
 Sans saisie admin, tous les champs sont vides ; aucune variable d'environnement ne
 fournit ces valeurs.
 
-Corps lead : `{name,email,phone?,message}`. Le destinataire est `LEADS_EMAIL`, puis
-`ADMIN_EMAIL`, puis `FROM_EMAIL`. Sans SMTP la requête répond quand même `{ok:true}`.
+Corps lead : `{name,email,phone?,locale?,message}` (avec `locale` `it|fr|en|de|es`,
+italien par défaut). Le destinataire est `LEADS_EMAIL`, puis `FROM_EMAIL`, et le
+message est rédigé dans cette langue. Sans SMTP la requête répond quand même
+`{ok:true}`.
 
 ## 10. Favoris serveur
 
@@ -312,7 +320,8 @@ Le front peut conserver ses favoris locaux en parallèle.
 | PATCH | `/api/alerts/:token` | même DTO ; corps `{active?}` |
 | DELETE | `/api/alerts/:token` | `{ok:true}` |
 
-Corps de création : `{email,name?,filters}` avec
+Corps de création : `{email,name?,locale?,filters}` avec `locale` `it|fr|en|de|es`
+(italien par défaut) et
 `filters = {search?,color?,wheels?,year?,maxPrice?,maxMileage?,warrantyOnly?}`.
 Règles : e-mail au format regex ; maximum **20 alertes par e-mail** (409 au-delà) ;
 dédup exacte sur `(email, filters JSON normalisé)` — une alerte existante est réactivée
@@ -335,8 +344,8 @@ demande `POST /api/admin/upload-signature` (JWT ADMIN), puis envoie chaque
 fichier directement à `api.cloudinary.com`. Cela évite la limite de 4,5 Mo du
 corps des requêtes et garde `CLOUDINARY_API_SECRET` côté serveur. Les variables
 à renseigner dans le projet Vercel sont `DATABASE_URL`, `DIRECT_URL`,
-`JWT_SECRET`, `APP_URL`, `ADMIN_CODE_HASH`, `ADMIN_EMAIL` (facultatif),
-`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `FROM_EMAIL`, `FROM_NAME`,
+`JWT_SECRET`, `APP_URL`, `ADMIN_CODE_HASH`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`,
+`SMTP_PASS`, `FROM_EMAIL`, `FROM_NAME`,
 `LEADS_EMAIL`, `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY` et
 `CLOUDINARY_API_SECRET`. `PORT` reste local et n'est pas nécessaire.
 
@@ -344,4 +353,4 @@ Le catalogue public (accueil, catalogue, fiches, favoris, comparateur, commande)
 consomme `GET /api/cars?limit=100&sort=featured` via `VehiclesProvider`. La liste
 locale `src/data/vehicles.ts` n'est plus qu'un repli hors ligne. Un ajout, une
 modification ou une suppression dans l'admin rafraîchit immédiatement ce
-provider, et un changement de hash le recharge également.
+provider, et un changement de route le recharge également.

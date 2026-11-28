@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Search } from 'lucide-react'
 import OrderDetail from '../components/OrderDetail'
+import { T } from '../i18n'
 import { apiFetch, errorMessage } from '../lib/api'
 import type { OrderDTO } from '../types/features'
 
@@ -43,6 +44,7 @@ export default function OrderTracking({ orderNumber }: { orderNumber: string | n
   }
 
   return (
+    <T>
     <div className="page shell tracking-page">
       <div className="page-head">
         <div>
@@ -71,5 +73,6 @@ export default function OrderTracking({ orderNumber }: { orderNumber: string | n
         <p className="form-context">Le suivi est affiché après vérification de votre numéro de commande et de votre adresse e-mail.</p>
       )}
     </div>
+    </T>
   )
 }

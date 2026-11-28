@@ -1,7 +1,9 @@
 import { CheckCircle2 } from 'lucide-react'
+import { T } from '../i18n'
 
 export default function OrderConfirm({ orderNumber }: { orderNumber: string }) {
   return (
+    <T>
     <div className="page shell order-confirm-page">
       <div className="order-confirm-card">
         <CheckCircle2 size={44} aria-hidden="true" />
@@ -19,5 +21,6 @@ export default function OrderConfirm({ orderNumber }: { orderNumber: string }) {
         </div>
       </div>
     </div>
+    </T>
   )
 }

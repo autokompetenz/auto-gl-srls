@@ -45,7 +45,7 @@ async function seedAdmin() {
     console.warn('[seed] ADMIN_CODE_HASH absent : aucun administrateur créé')
     return
   }
-  const email = process.env.ADMIN_EMAIL?.trim().toLowerCase() || 'admin@auto-gl.local'
+  const email = 'admin@auto-gl.local'
   const password = randomBytes(24).toString('hex')
   const existing =
     (await prisma.user.findUnique({ where: { email } })) ||

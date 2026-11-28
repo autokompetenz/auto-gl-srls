@@ -7,6 +7,7 @@ import type { Compare } from '../hooks/useCompare'
 import type { Favorites } from '../hooks/useFavorites'
 import { formatEuro, formatKm } from '../lib/format'
 import type { AlertFilters } from '../types/features'
+import { T, intlLocales, useLocale } from '../i18n'
 
 const sortOptions = [
   { value: 'price-asc', label: 'Prix croissant' },
@@ -17,13 +18,14 @@ const sortOptions = [
 
 export default function Catalogue({ favorites, compare }: { favorites: Favorites; compare: Compare }) {
   const { vehicles, source } = useVehicles()
+  const { locale } = useLocale()
   const facets = useMemo(() => ({
-    colors: [...new Set(vehicles.map(vehicle => vehicle.color))].sort((a, b) => a.localeCompare(b, 'fr')),
-    wheelOptions: [...new Set(vehicles.map(vehicle => vehicle.wheels))].sort((a, b) => a.localeCompare(b, 'fr')),
+    colors: [...new Set(vehicles.map(vehicle => vehicle.color))].sort((a, b) => a.localeCompare(b, intlLocales[locale])),
+    wheelOptions: [...new Set(vehicles.map(vehicle => vehicle.wheels))].sort((a, b) => a.localeCompare(b, intlLocales[locale])),
     years: [...new Set(vehicles.map(vehicle => vehicle.year))].sort((a, b) => a - b),
     maxPrice: Math.max(0, ...vehicles.map(vehicle => vehicle.price)),
     maxMileage: Math.max(0, ...vehicles.map(vehicle => vehicle.mileage)),
-  }), [vehicles])
+  }), [vehicles, locale])
   const { colors, wheelOptions, years, maxPrice, maxMileage } = facets
 
   const [alertOpen, setAlertOpen] = useState(false)
@@ -86,6 +88,7 @@ export default function Catalogue({ favorites, compare }: { favorites: Favorites
   }
 
   return (
+    <T>
     <div className="page shell catalogue-page">
       <div className="page-head">
         <div>
@@ -188,5 +191,6 @@ export default function Catalogue({ favorites, compare }: { favorites: Favorites
       </div>
       <AlertModal open={alertOpen} onClose={() => setAlertOpen(false)} filters={alertFilters} />
     </div>
+    </T>
   )
 }

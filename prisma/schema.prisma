@@ -159,6 +159,7 @@ model SearchAlert {
   userId        String?
   email         String
   name          String
+  locale        String   @default("it")
   filters       Json
   active        Boolean  @default(true)
   notifiedCount Int      @default(0)
@@ -200,6 +201,7 @@ model Order {
   postalCode          String
   city                String
   country             String        @default("France")
+  locale              String        @default("it")
   notes               String?
   purchaseType        PurchaseType  @default(ACHAT)
   deliveryType        DeliveryType  @default(LIVRAISON)

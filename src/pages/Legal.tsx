@@ -1,4 +1,5 @@
 import { company, companyAddress } from '../data/company'
+import { T } from '../i18n'
 
 const rows = [
   ['Dénomination', company.name],
@@ -16,6 +17,7 @@ const rows = [
 
 export default function Legal() {
   return (
+    <T>
     <div className="page shell legal-page">
       <div className="page-head">
         <div>
@@ -44,5 +46,6 @@ export default function Legal() {
         </aside>
       </div>
     </div>
+    </T>
   )
 }

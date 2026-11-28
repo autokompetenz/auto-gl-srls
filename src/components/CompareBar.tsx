@@ -1,6 +1,7 @@
 import { ArrowRight, X } from 'lucide-react'
 import { useVehicles } from '../context/VehiclesContext'
 import type { Compare } from '../hooks/useCompare'
+import { T } from '../i18n'
 
 export default function CompareBar({ compare, hidden }: { compare: Compare; hidden: boolean }) {
   const { vehicleById } = useVehicles()
@@ -9,6 +10,7 @@ export default function CompareBar({ compare, hidden }: { compare: Compare; hidd
   const selected = compare.ids.map(vehicleById).filter((vehicle): vehicle is NonNullable<typeof vehicle> => Boolean(vehicle))
 
   return (
+    <T>
     <aside className="compare-bar" aria-label="Sélection à comparer">
       <div className="shell compare-bar-inner">
         <div className="compare-bar-label">
@@ -38,5 +40,6 @@ export default function CompareBar({ compare, hidden }: { compare: Compare; hidd
         </div>
       </div>
     </aside>
+    </T>
   )
 }

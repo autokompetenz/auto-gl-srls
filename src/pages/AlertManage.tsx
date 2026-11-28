@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
 import { BellOff, CheckCircle2, Trash2 } from 'lucide-react'
 import type { Navigate } from '../hooks/useRoute'
+import { T, useLocale } from '../i18n'
 import { describeFilters } from '../lib/alerts'
 import { apiFetch, errorMessage } from '../lib/api'
 import { formatDate } from '../lib/format'
 import type { AlertDTO } from '../types/features'
 
 export default function AlertManage({ token, navigate }: { token: string; navigate: Navigate }) {
+  const { t } = useLocale()
   const [alert, setAlert] = useState<AlertDTO | null>(null)
   const [status, setStatus] = useState<'loading' | 'idle' | 'error'>('loading')
   const [error, setError] = useState('')
@@ -46,7 +48,7 @@ export default function AlertManage({ token, navigate }: { token: string; naviga
   }
 
   const remove = async () => {
-    if (!window.confirm('Supprimer définitivement cette alerte ?')) return
+    if (!window.confirm(t('Supprimer définitivement cette alerte ?'))) return
     try {
       await apiFetch(path, { method: 'DELETE' })
       navigate('/catalogue')
@@ -56,6 +58,7 @@ export default function AlertManage({ token, navigate }: { token: string; naviga
   }
 
   return (
+    <T>
     <div className="page shell alert-page">
       <div className="page-head">
         <div>
@@ -104,5 +107,6 @@ export default function AlertManage({ token, navigate }: { token: string; naviga
         </div>
       )}
     </div>
+    </T>
   )
 }

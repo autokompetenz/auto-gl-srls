@@ -34,6 +34,7 @@ export function toAlertDTO(alert) {
     token: alert.token,
     email: alert.email,
     name: alert.name ?? '',
+    locale: alert.locale ?? 'it',
     filters: normalizeAlertFilters(alert.filters),
     active: alert.active,
     notifiedCount: alert.notifiedCount,
@@ -46,7 +47,7 @@ export async function findAlert(token) {
   return prisma.searchAlert.findUnique({ where: { token } })
 }
 
-export async function createAlert({ email, name, filters }, userId = null) {
+export async function createAlert({ email, name, locale, filters }, userId = null) {
   const normalized = normalizeAlertFilters(filters)
   const key = filtersKey(normalized)
   const existing = await prisma.searchAlert.findMany({
@@ -71,6 +72,7 @@ export async function createAlert({ email, name, filters }, userId = null) {
       token: createToken(),
       email,
       name: name ?? '',
+      locale: locale ?? 'it',
       filters: normalized,
       active: true,
       userId,
@@ -103,7 +105,7 @@ export async function notifyAlerts(car) {
       const emailKey = alert.email.toLowerCase()
       if (!emailed.has(emailKey)) {
         emailed.add(emailKey)
-        await sendAlertNotification({ to: alert.email, name: alert.name, car: isMatch })
+        await sendAlertNotification({ to: alert.email, name: alert.name, locale: alert.locale, car: isMatch })
       }
     }
     return { matched, emails: emailed.size }

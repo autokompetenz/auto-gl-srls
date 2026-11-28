@@ -3,6 +3,7 @@ import { BellRing, CheckCircle2, X } from 'lucide-react'
 import { describeFilters } from '../lib/alerts'
 import { apiFetch, errorMessage } from '../lib/api'
 import type { AlertFilters } from '../types/features'
+import { T, useLocale } from '../i18n'
 
 type Status = 'idle' | 'loading' | 'done' | 'error'
 
@@ -22,6 +23,7 @@ export default function AlertModal({
   const [token, setToken] = useState('')
   const [existing, setExisting] = useState(false)
   const emailRef = useRef<HTMLInputElement>(null)
+  const { locale } = useLocale()
   const chips = describeFilters(filters)
 
   useEffect(() => {
@@ -48,7 +50,7 @@ export default function AlertModal({
     try {
       const response = await apiFetch<{ token?: string; existing?: boolean }>('/alerts', {
         method: 'POST',
-        body: { email: email.trim(), name: name.trim() || undefined, filters },
+        body: { email: email.trim(), name: name.trim() || undefined, locale, filters },
       })
       if (!response?.token) throw new Error('L’alerte n’a pas pu être créée.')
       setToken(response.token)
@@ -61,6 +63,7 @@ export default function AlertModal({
   }
 
   return (
+    <T>
     <div className="modal-backdrop" onMouseDown={event => { if (event.target === event.currentTarget) onClose() }}>
       <div className="modal-panel" role="dialog" aria-modal="true" aria-labelledby="alert-modal-title">
         <button type="button" className="modal-close" onClick={onClose} aria-label="Fermer">
@@ -100,5 +103,6 @@ export default function AlertModal({
         )}
       </div>
     </div>
+    </T>
   )
 }

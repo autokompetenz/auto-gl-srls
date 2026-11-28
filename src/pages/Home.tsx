@@ -3,6 +3,7 @@ import VehicleCard from '../components/VehicleCard'
 import { useVehicles } from '../context/VehiclesContext'
 import type { Compare } from '../hooks/useCompare'
 import type { Favorites } from '../hooks/useFavorites'
+import { T, useLocale } from '../i18n'
 
 const steps: { icons: LucideIcon[]; title: string; text: string }[] = [
   {
@@ -121,9 +122,11 @@ const protectionHighlights = ['Garantie incluse', 'Protection étendue', 'Assura
 
 export default function Home({ favorites, compare }: { favorites: Favorites; compare: Compare }) {
   const { vehicles } = useVehicles()
+  const { t } = useLocale()
   const featured = vehicles.slice(0, 3)
 
   return (
+    <T>
     <div className="page home-page">
       <section className="hero shell">
         <div className="hero-copy">
@@ -181,7 +184,7 @@ export default function Home({ favorites, compare }: { favorites: Favorites; com
         <div className="steps-grid">
           {steps.map((step, index) => (
             <article className="step-card" key={step.title}>
-              <span className="step-number">Step {String(index + 1).padStart(2, '0')}</span>
+              <span className="step-number">{t(`Step ${String(index + 1).padStart(2, '0')}`)}</span>
               <div className="step-icons">
                 {step.icons.map((Icon, iconIndex) => (
                   <Icon key={iconIndex} size={23} aria-hidden="true" />
@@ -289,5 +292,6 @@ export default function Home({ favorites, compare }: { favorites: Favorites; com
         </div>
       </section>
     </div>
+    </T>
   )
 }

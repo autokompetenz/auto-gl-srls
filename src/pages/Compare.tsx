@@ -4,6 +4,7 @@ import type { Compare as CompareHook } from '../hooks/useCompare'
 import { estimateMonthly } from '../lib/finance'
 import { formatEuro, formatKm } from '../lib/format'
 import type { VehicleDTO } from '../types/features'
+import { T } from '../i18n'
 
 type Row = { label: string; value: (vehicle: VehicleDTO) => string }
 
@@ -25,6 +26,7 @@ export default function Compare({ compare }: { compare: CompareHook }) {
   const selected = compare.ids.map(vehicleById).filter((vehicle): vehicle is VehicleDTO => Boolean(vehicle))
 
   return (
+    <T>
     <div className="page shell compare-page">
       <div className="page-head">
         <div>
@@ -89,5 +91,6 @@ export default function Compare({ compare }: { compare: CompareHook }) {
         </div>
       )}
     </div>
+    </T>
   )
 }

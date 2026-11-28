@@ -14,7 +14,7 @@
     "dev:full": "concurrently -k -n api,web -c cyan,magenta \"pnpm:api\" \"pnpm:dev\"",
     "build": "tsc -b && vite build",
     "preview": "vite preview --host 127.0.0.1 --port 5221 --strictPort",
-    "test": "node --test tests/*.test.mjs",
+    "test": "node --import tsx --test tests/*.test.mjs",
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.js",
     "postinstall": "prisma generate"

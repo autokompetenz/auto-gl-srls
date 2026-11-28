@@ -1,9 +1,11 @@
 import { Building2, ClipboardList, Mail, MapPin } from 'lucide-react'
 import ContactForm from '../components/ContactForm'
+import { T } from '../i18n'
 import { company, companyAddress, companyLocation } from '../data/company'
 
 export default function Contact() {
   return (
+    <T>
     <div className="page shell contact-page">
       <div className="page-head">
         <div>
@@ -44,5 +46,6 @@ export default function Contact() {
         </aside>
       </div>
     </div>
+    </T>
   )
 }

@@ -10,14 +10,15 @@ import AdminDashboard from './AdminDashboard'
 import AdminOrders from './AdminOrders'
 import AdminPayments from './AdminPayments'
 import AdminSettings from './AdminSettings'
+import { T } from '../../i18n'
 
 function Section({ section }: { section: AdminSection }) {
-  if (section === 'vehicles') return <AdminCars />
-  if (section === 'orders') return <AdminOrders />
-  if (section === 'clients') return <AdminClients />
-  if (section === 'payments') return <AdminPayments />
-  if (section === 'settings') return <AdminSettings />
-  return <AdminDashboard />
+  if (section === 'vehicles') return <T><AdminCars /></T>
+  if (section === 'orders') return <T><AdminOrders /></T>
+  if (section === 'clients') return <T><AdminClients /></T>
+  if (section === 'payments') return <T><AdminPayments /></T>
+  if (section === 'settings') return <T><AdminSettings /></T>
+  return <T><AdminDashboard /></T>
 }
 
 export default function AdminGate({ section }: { section: AdminSection }) {
@@ -69,35 +70,41 @@ export default function AdminGate({ section }: { section: AdminSection }) {
 
   if (checking) {
     return (
-      <div className="page shell admin-gate">
-        <p className="form-status" role="status">Vérification de vos droits d’accès…</p>
-      </div>
+      <T>
+        <div className="page shell admin-gate">
+          <p className="form-status" role="status">Vérification de vos droits d’accès…</p>
+        </div>
+      </T>
     )
   }
 
   if (user?.role !== 'ADMIN') {
     return (
-      <div className="page shell admin-gate">
-        <div className="account-card">
-          <ShieldCheck size={32} aria-hidden="true" />
-          <h1>Accès administrateur</h1>
-          <p>Saisissez le code d’accès administrateur configuré sur le serveur.</p>
-          <form className="account-form" onSubmit={event => void submit(event)} noValidate>
-            <label>Code d’accès<input type="password" inputMode="numeric" autoComplete="one-time-code" value={code} onChange={event => setCode(event.target.value)} required /></label>
-            <button type="submit" className="btn btn-primary" disabled={status === 'loading'}>
-              {status === 'loading' ? 'Vérification…' : 'Accéder à l’administration'}
-            </button>
-            {status === 'error' && <p className="form-status error" role="alert">{error}</p>}
-          </form>
-          <a className="btn btn-ghost" href="/">Retour à l’accueil</a>
+      <T>
+        <div className="page shell admin-gate">
+          <div className="account-card">
+            <ShieldCheck size={32} aria-hidden="true" />
+            <h1>Accès administrateur</h1>
+            <p>Saisissez le code d’accès administrateur configuré sur le serveur.</p>
+            <form className="account-form" onSubmit={event => void submit(event)} noValidate>
+              <label>Code d’accès<input type="password" inputMode="numeric" autoComplete="one-time-code" value={code} onChange={event => setCode(event.target.value)} required /></label>
+              <button type="submit" className="btn btn-primary" disabled={status === 'loading'}>
+                {status === 'loading' ? 'Vérification…' : 'Accéder à l’administration'}
+              </button>
+              {status === 'error' && <p className="form-status error" role="alert">{error}</p>}
+            </form>
+            <a className="btn btn-ghost" href="/">Retour à l’accueil</a>
+          </div>
         </div>
-      </div>
+      </T>
     )
   }
 
   return (
-    <AdminLayout section={section}>
-      <Section section={section} />
-    </AdminLayout>
+    <T>
+      <AdminLayout section={section}>
+        <Section section={section} />
+      </AdminLayout>
+    </T>
   )
 }

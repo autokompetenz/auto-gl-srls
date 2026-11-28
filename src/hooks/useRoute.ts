@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
+import { localizedPath, routeChangeEvent, splitLocale } from '../i18n'
 
-export const routeChangeEvent = 'auto-gl-srls:routechange'
+export { routeChangeEvent }
 
 export const adminSections = ['dashboard', 'vehicles', 'orders', 'clients', 'payments', 'settings'] as const
 export type AdminSection = (typeof adminSections)[number]
@@ -28,8 +29,7 @@ function decode(value: string): string {
   }
 }
 
-/** Les liens de navigation utilisent des segments français, acceptés ici
- *  en plus des identifiants internes anglais. */
+/** Les segments français restent acceptés, quelle que soit la langue affichée. */
 const adminSectionAliases: Record<string, AdminSection> = {
   dashboard: 'dashboard',
   vehicles: 'vehicles',
@@ -64,27 +64,26 @@ function segment(path: string, prefix: string): string | null {
 /** Anciennes pages supprimées : les liens/bookmarks reviennent à l'accueil. */
 const removedPaths = new Set(['/connexion', '/mes-commandes'])
 
-/** Redirige les anciennes URL en `#/...` vers des URL propres, sans '#'. */
+/** Convertit les anciennes URL `#/...` et canonicalise le préfixe de langue. */
 function normalizeUrl(): void {
+  let rawPath = window.location.pathname
   const hash = window.location.hash.replace(/^#/, '')
   if (hash) {
     const [hashPath = '/', hashSearch = ''] = hash.split('?', 2)
-    const path = removedPaths.has(cleanPath(hashPath)) ? '/' : cleanPath(hashPath)
-    const query = hashSearch ? `?${hashSearch}` : ''
-    window.history.replaceState(null, '', `${path}${query}`)
-    return
-  }
-
-  const path = cleanPath(window.location.pathname)
-  const target = removedPaths.has(path) ? '/' : path
-  const url = `${target}${window.location.search}`
-  if (url !== `${window.location.pathname}${window.location.search}`) {
+    rawPath = removedPaths.has(cleanPath(hashPath)) ? '/' : cleanPath(hashPath)
+    const url = `${rawPath}${hashSearch ? `?${hashSearch}` : ''}`
     window.history.replaceState(null, '', url)
   }
+
+  const { locale, path } = splitLocale(rawPath)
+  const target = removedPaths.has(path) ? '/' : path
+  const url = `${localizedPath(locale, target)}${window.location.search}`
+  const current = `${window.location.pathname.replace(/\/+$/, '') || '/'}${window.location.search}`
+  if (url !== current) window.history.replaceState(null, '', url)
 }
 
 export function parseRoute(): Route {
-  const path = cleanPath(window.location.pathname)
+  const { path } = splitLocale(window.location.pathname)
   const queryPart = window.location.search.replace(/^\?/, '')
 
   if (path === '/' || path === '') return { page: 'home' }
@@ -150,7 +149,8 @@ export function useRoute() {
   const navigate = (path: string) => {
     const target = path.startsWith('/') ? path : `/${path}`
     const [pathPart, queryPart = ''] = target.split('?', 2)
-    const url = `${cleanPath(pathPart)}${queryPart ? `?${queryPart}` : ''}`
+    const { locale } = splitLocale(window.location.pathname)
+    const url = `${localizedPath(locale, cleanPath(pathPart))}${queryPart ? `?${queryPart}` : ''}`
     if (`${window.location.pathname}${window.location.search}` === url) {
       window.scrollTo({ top: 0, behavior: 'auto' })
       return

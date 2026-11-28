@@ -1,6 +1,7 @@
 import { LogOut } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import type { AdminSection } from '../../hooks/useRoute'
+import { T } from '../../i18n'
 
 type Item = { section: AdminSection; href: string; label: string }
 
@@ -17,34 +18,36 @@ export default function AdminLayout({ section, children }: { section: AdminSecti
   const { user, logout } = useAuth()
 
   return (
-    <div className="page shell admin-layout">
-      <div className="admin-head">
-        <div>
-          <p className="eyebrow">Administration</p>
-          <h1>Espace AUTO GL SRLS.</h1>
-          <p>{user?.name} · {user?.email}</p>
+    <T>
+      <div className="page shell admin-layout">
+        <div className="admin-head">
+          <div>
+            <p className="eyebrow">Administration</p>
+            <h1>Espace AUTO GL SRLS.</h1>
+            <p>{user?.name}</p>
+          </div>
+          <button type="button" className="btn btn-ghost" onClick={logout}>
+            <LogOut size={16} aria-hidden="true" /> Déconnexion
+          </button>
         </div>
-        <button type="button" className="btn btn-ghost" onClick={logout}>
-          <LogOut size={16} aria-hidden="true" /> Déconnexion
-        </button>
+        <div className="admin-body">
+          <nav className="admin-nav" aria-label="Navigation administration">
+            {items.map(item => (
+              <a
+                key={item.section}
+                href={item.href}
+                className={section === item.section ? 'admin-nav-link active' : 'admin-nav-link'}
+                aria-current={section === item.section ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+          <section className="admin-content" aria-label="Contenu administration">
+            {children}
+          </section>
+        </div>
       </div>
-      <div className="admin-body">
-        <nav className="admin-nav" aria-label="Navigation administration">
-          {items.map(item => (
-            <a
-              key={item.section}
-              href={item.href}
-              className={section === item.section ? 'admin-nav-link active' : 'admin-nav-link'}
-              aria-current={section === item.section ? 'page' : undefined}
-            >
-              {item.label}
-            </a>
-          ))}
-        </nav>
-        <section className="admin-content" aria-label="Contenu administration">
-          {children}
-        </section>
-      </div>
-    </div>
+    </T>
   )
 }

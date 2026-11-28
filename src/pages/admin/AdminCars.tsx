@@ -6,6 +6,7 @@ import { uploadImagesDirect } from '../../lib/cloudinaryUpload'
 import { useVehicles } from '../../context/VehiclesContext'
 import { formatEuro, formatKm } from '../../lib/format'
 import type { VehicleDTO } from '../../types/features'
+import { T } from '../../i18n'
 
 type CarForm = {
   id: string
@@ -308,150 +309,152 @@ export default function AdminCars() {
   const photoCount = form ? galleryEntries(form.gallery).length + previews.length : 0
 
   return (
-    <div className="admin-panel">
-      <div className="admin-panel-head">
-        <h2>{form ? (cars.some(car => car.id === form.id) ? 'Modifier le véhicule' : 'Nouveau véhicule') : 'Véhicules'}</h2>
-        {!form && (
-          <div className="admin-actions">
-            <button type="button" className="btn btn-ghost" onClick={() => void load()} disabled={status === 'loading'}>
-              {status === 'loading' ? 'Chargement…' : 'Actualiser'}
-            </button>
-            <button type="button" className="btn btn-primary" onClick={() => openForm()}>
-              <Plus size={16} aria-hidden="true" /> Ajouter un véhicule
-            </button>
+    <T>
+      <div className="admin-panel">
+        <div className="admin-panel-head">
+          <h2>{form ? (cars.some(car => car.id === form.id) ? 'Modifier le véhicule' : 'Nouveau véhicule') : 'Véhicules'}</h2>
+          {!form && (
+            <div className="admin-actions">
+              <button type="button" className="btn btn-ghost" onClick={() => void load()} disabled={status === 'loading'}>
+                {status === 'loading' ? 'Chargement…' : 'Actualiser'}
+              </button>
+              <button type="button" className="btn btn-primary" onClick={() => openForm()}>
+                <Plus size={16} aria-hidden="true" /> Ajouter un véhicule
+              </button>
+            </div>
+          )}
+        </div>
+
+        {flash && <p className="form-status success" role="status">✓ {flash}</p>}
+        {actionError && <p className="form-status error" role="alert">{actionError}</p>}
+
+        {form ? (
+          <form className="admin-form-card" onSubmit={event => void save(event)} noValidate>
+            <section className="admin-form-section">
+              <h3>Informations principales</h3>
+              <div className="form-grid">
+                <label>Identifiant (facultatif)<input type="text" value={form.id} onChange={update('id')} readOnly={cars.some(car => car.id === form.id)} placeholder="Généré automatiquement" /></label>
+                <label>Nom <span className="required">*</span><input type="text" value={form.name} onChange={update('name')} placeholder="AUTO GL Studio Silver" /></label>
+                <label>Version <span className="required">*</span><input type="text" value={form.version} onChange={update('version')} placeholder="Série 01 · Multi-spoke" /></label>
+                <label>Année <span className="required">*</span><input type="number" min="1900" max="2100" value={form.year} onChange={update('year')} /></label>
+                <label>Kilométrage<input type="number" min="0" value={form.mileage} onChange={update('mileage')} /></label>
+                <label>Prix (EUR) <span className="required">*</span><input type="number" min="1" value={form.price} onChange={update('price')} placeholder="27900" /></label>
+                <label>Couleur<input type="text" value={form.color} onChange={update('color')} placeholder="Studio Silver" /></label>
+                <label>Jantes<input type="text" value={form.wheels} onChange={update('wheels')} /></label>
+                <label>Localisation<input type="text" value={form.location} onChange={update('location')} /></label>
+                <label>Marque<input type="text" value={form.brandKey} onChange={update('brandKey')} /></label>
+              </div>
+            </section>
+
+            <section className="admin-form-section">
+              <h3>Caractéristiques techniques</h3>
+              <div className="form-grid">
+                <label>Énergie<select value={form.fuel} onChange={update('fuel')}>{fuelOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+                <label>Transmission<select value={form.transmission} onChange={update('transmission')}>{transmissionOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+                <label>Catégorie<select value={form.category} onChange={update('category')}>{categoryOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+                <label>Boîte<input type="text" value={form.gearbox} onChange={update('gearbox')} /></label>
+                <label>Garantie<input type="text" value={form.warranty} onChange={update('warranty')} /></label>
+              </div>
+            </section>
+
+            <section className="admin-form-section">
+              <h3>Images</h3>
+              <label>Image principale (URL)<input type="text" value={form.image} onChange={update('image')} placeholder="https://… ou chemin local" /></label>
+              <label className="admin-upload">
+                <UploadCloud size={17} aria-hidden="true" />
+                {uploading ? 'Envoi en cours…' : `📷 Choisir des images (${photoCount}/${MAX_IMAGES})`}
+                <input type="file" accept="image/*" multiple disabled={saving || uploading} onChange={event => {
+                  addPhotos(event.target.files)
+                  event.target.value = ''
+                }} />
+              </label>
+              <p className="form-context">Jusqu’à 20 images, 10 Mo par fichier avant compression. La première image devient l’image principale si le champ est vide.</p>
+
+              {photoCount > 0 && (
+                <div className="admin-photo-grid" aria-label="Photos du véhicule">
+                  {galleryEntries(form.gallery).map((item, index) => (
+                    <div className="admin-photo" key={`existing-${index}-${item.src}`}>
+                      <img src={item.src} alt={item.caption || `Vue ${index + 1}`} />
+                      <span>{index === 0 ? '★ ' : ''}{item.caption || `Vue ${index + 1}`}</span>
+                      <button type="button" aria-label={`Retirer ${item.caption || `Vue ${index + 1}`}`} onClick={() => setForm(previous => previous
+                        ? { ...previous, gallery: lines(previous.gallery).filter((_, lineIndex) => lineIndex !== index).join('\n') }
+                        : previous)}>
+                        <X size={14} aria-hidden="true" />
+                      </button>
+                    </div>
+                  ))}
+                  {previews.map((item, index) => (
+                    <div className="admin-photo" key={item.id}>
+                      <img src={item.url} alt={item.name} />
+                      <span>{galleryEntries(form.gallery).length === 0 && index === 0 ? '★ ' : ''}{item.name}</span>
+                      <button type="button" aria-label={`Retirer ${item.name}`} onClick={() => removePreview(item.id)}>
+                        <X size={14} aria-hidden="true" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
+
+            <section className="admin-form-section">
+              <h3>Description</h3>
+              <label>Description<textarea rows={5} value={form.description} onChange={update('description')} placeholder="Décrivez le véhicule en quelques phrases." /></label>
+            </section>
+
+            <section className="admin-form-section">
+              <h3>Options</h3>
+              <div className="checkbox-pair">
+                <label className="checkbox-field"><input type="checkbox" checked={form.isActive} onChange={update('isActive')} /> Actif (visible en catalogue)</label>
+                <label className="checkbox-field"><input type="checkbox" checked={form.isFeatured} onChange={update('isFeatured')} /> À la une</label>
+                <label className="checkbox-field"><input type="checkbox" checked={form.isSold} onChange={update('isSold')} /> Vendu</label>
+              </div>
+            </section>
+
+            <div className="form-actions">
+              <button type="submit" className="btn btn-primary" disabled={saving || uploading}>
+                {saving ? 'Enregistrement…' : cars.some(car => car.id === form.id) ? '✓ Mettre à jour' : '+ Créer le véhicule'}
+              </button>
+              <button type="button" className="btn btn-ghost" onClick={() => openForm()} disabled={saving}>Annuler</button>
+            </div>
+          </form>
+        ) : status === 'loading' ? (
+          <p className="form-status" role="status">Chargement des véhicules…</p>
+        ) : cars.length ? (
+          <div className="table-scroll">
+            <table className="table-list">
+              <thead><tr><th scope="col">Véhicule</th><th scope="col">Prix</th><th scope="col">Kilométrage</th><th scope="col">État</th><th scope="col">Actions</th></tr></thead>
+              <tbody>
+                {cars.map(car => (
+                  <tr key={car.id}>
+                    <td><strong>{car.name}</strong><small>{car.id} · {car.version}</small></td>
+                    <td>{formatEuro(car.price)}</td>
+                    <td>{formatKm(car.mileage)}</td>
+                    <td>
+                      <span className="status-badge small">
+                        {car.isActive === false ? 'Inactif' : car.isSold ? 'Vendu' : car.isFeatured ? 'À la une · TOP' : 'Disponible'}
+                      </span>
+                    </td>
+                    <td>
+                      <button type="button" className="table-action" onClick={() => openForm(car)}>
+                        <Pencil size={15} aria-hidden="true" /> Modifier
+                      </button>
+                      <button type="button" className="table-action" onClick={() => void toggleActive(car)}>
+                        {car.isActive === false ? <Eye size={15} aria-hidden="true" /> : <EyeOff size={15} aria-hidden="true" />}
+                        {car.isActive === false ? 'Activer' : 'Désactiver'}
+                      </button>
+                      <button type="button" className="table-action danger" onClick={() => void remove(car)}>
+                        <Trash2 size={15} aria-hidden="true" /> Supprimer
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
+        ) : (
+          <p className="form-context">Aucun véhicule renvoyé par l’API. Ajoutez votre premier véhicule au catalogue.</p>
         )}
       </div>
-
-      {flash && <p className="form-status success" role="status">✓ {flash}</p>}
-      {actionError && <p className="form-status error" role="alert">{actionError}</p>}
-
-      {form ? (
-        <form className="admin-form-card" onSubmit={event => void save(event)} noValidate>
-          <section className="admin-form-section">
-            <h3>Informations principales</h3>
-            <div className="form-grid">
-              <label>Identifiant (facultatif)<input type="text" value={form.id} onChange={update('id')} readOnly={cars.some(car => car.id === form.id)} placeholder="Généré automatiquement" /></label>
-              <label>Nom <span className="required">*</span><input type="text" value={form.name} onChange={update('name')} placeholder="AUTO GL Studio Silver" /></label>
-              <label>Version <span className="required">*</span><input type="text" value={form.version} onChange={update('version')} placeholder="Série 01 · Multi-spoke" /></label>
-              <label>Année <span className="required">*</span><input type="number" min="1900" max="2100" value={form.year} onChange={update('year')} /></label>
-              <label>Kilométrage<input type="number" min="0" value={form.mileage} onChange={update('mileage')} /></label>
-              <label>Prix (EUR) <span className="required">*</span><input type="number" min="1" value={form.price} onChange={update('price')} placeholder="27900" /></label>
-              <label>Couleur<input type="text" value={form.color} onChange={update('color')} placeholder="Studio Silver" /></label>
-              <label>Jantes<input type="text" value={form.wheels} onChange={update('wheels')} /></label>
-              <label>Localisation<input type="text" value={form.location} onChange={update('location')} /></label>
-              <label>Marque<input type="text" value={form.brandKey} onChange={update('brandKey')} /></label>
-            </div>
-          </section>
-
-          <section className="admin-form-section">
-            <h3>Caractéristiques techniques</h3>
-            <div className="form-grid">
-              <label>Énergie<select value={form.fuel} onChange={update('fuel')}>{fuelOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
-              <label>Transmission<select value={form.transmission} onChange={update('transmission')}>{transmissionOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
-              <label>Catégorie<select value={form.category} onChange={update('category')}>{categoryOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
-              <label>Boîte<input type="text" value={form.gearbox} onChange={update('gearbox')} /></label>
-              <label>Garantie<input type="text" value={form.warranty} onChange={update('warranty')} /></label>
-            </div>
-          </section>
-
-          <section className="admin-form-section">
-            <h3>Images</h3>
-            <label>Image principale (URL)<input type="text" value={form.image} onChange={update('image')} placeholder="https://… ou chemin local" /></label>
-            <label className="admin-upload">
-              <UploadCloud size={17} aria-hidden="true" />
-              {uploading ? 'Envoi en cours…' : `📷 Choisir des images (${photoCount}/${MAX_IMAGES})`}
-              <input type="file" accept="image/*" multiple disabled={saving || uploading} onChange={event => {
-                addPhotos(event.target.files)
-                event.target.value = ''
-              }} />
-            </label>
-            <p className="form-context">Jusqu’à 20 images, 10 Mo par fichier avant compression. La première image devient l’image principale si le champ est vide.</p>
-
-            {photoCount > 0 && (
-              <div className="admin-photo-grid" aria-label="Photos du véhicule">
-                {galleryEntries(form.gallery).map((item, index) => (
-                  <div className="admin-photo" key={`existing-${index}-${item.src}`}>
-                    <img src={item.src} alt={item.caption || `Vue ${index + 1}`} />
-                    <span>{index === 0 ? '★ ' : ''}{item.caption || `Vue ${index + 1}`}</span>
-                    <button type="button" aria-label={`Retirer ${item.caption || `Vue ${index + 1}`}`} onClick={() => setForm(previous => previous
-                      ? { ...previous, gallery: lines(previous.gallery).filter((_, lineIndex) => lineIndex !== index).join('\n') }
-                      : previous)}>
-                      <X size={14} aria-hidden="true" />
-                    </button>
-                  </div>
-                ))}
-                {previews.map((item, index) => (
-                  <div className="admin-photo" key={item.id}>
-                    <img src={item.url} alt={item.name} />
-                    <span>{galleryEntries(form.gallery).length === 0 && index === 0 ? '★ ' : ''}{item.name}</span>
-                    <button type="button" aria-label={`Retirer ${item.name}`} onClick={() => removePreview(item.id)}>
-                      <X size={14} aria-hidden="true" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </section>
-
-          <section className="admin-form-section">
-            <h3>Description</h3>
-            <label>Description<textarea rows={5} value={form.description} onChange={update('description')} placeholder="Décrivez le véhicule en quelques phrases." /></label>
-          </section>
-
-          <section className="admin-form-section">
-            <h3>Options</h3>
-            <div className="checkbox-pair">
-              <label className="checkbox-field"><input type="checkbox" checked={form.isActive} onChange={update('isActive')} /> Actif (visible en catalogue)</label>
-              <label className="checkbox-field"><input type="checkbox" checked={form.isFeatured} onChange={update('isFeatured')} /> À la une</label>
-              <label className="checkbox-field"><input type="checkbox" checked={form.isSold} onChange={update('isSold')} /> Vendu</label>
-            </div>
-          </section>
-
-          <div className="form-actions">
-            <button type="submit" className="btn btn-primary" disabled={saving || uploading}>
-              {saving ? 'Enregistrement…' : cars.some(car => car.id === form.id) ? '✓ Mettre à jour' : '+ Créer le véhicule'}
-            </button>
-            <button type="button" className="btn btn-ghost" onClick={() => openForm()} disabled={saving}>Annuler</button>
-          </div>
-        </form>
-      ) : status === 'loading' ? (
-        <p className="form-status" role="status">Chargement des véhicules…</p>
-      ) : cars.length ? (
-        <div className="table-scroll">
-          <table className="table-list">
-            <thead><tr><th scope="col">Véhicule</th><th scope="col">Prix</th><th scope="col">Kilométrage</th><th scope="col">État</th><th scope="col">Actions</th></tr></thead>
-            <tbody>
-              {cars.map(car => (
-                <tr key={car.id}>
-                  <td><strong>{car.name}</strong><small>{car.id} · {car.version}</small></td>
-                  <td>{formatEuro(car.price)}</td>
-                  <td>{formatKm(car.mileage)}</td>
-                  <td>
-                    <span className="status-badge small">
-                      {car.isActive === false ? 'Inactif' : car.isSold ? 'Vendu' : car.isFeatured ? 'À la une · TOP' : 'Disponible'}
-                    </span>
-                  </td>
-                  <td>
-                    <button type="button" className="table-action" onClick={() => openForm(car)}>
-                      <Pencil size={15} aria-hidden="true" /> Modifier
-                    </button>
-                    <button type="button" className="table-action" onClick={() => void toggleActive(car)}>
-                      {car.isActive === false ? <Eye size={15} aria-hidden="true" /> : <EyeOff size={15} aria-hidden="true" />}
-                      {car.isActive === false ? 'Activer' : 'Désactiver'}
-                    </button>
-                    <button type="button" className="table-action danger" onClick={() => void remove(car)}>
-                      <Trash2 size={15} aria-hidden="true" /> Supprimer
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <p className="form-context">Aucun véhicule renvoyé par l’API. Ajoutez votre premier véhicule au catalogue.</p>
-      )}
-    </div>
+    </T>
   )
 }

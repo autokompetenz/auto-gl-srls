@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { ArrowRight, CheckCircle2 } from 'lucide-react'
 import { apiFetch, errorMessage } from '../lib/api'
+import { T, useLocale } from '../i18n'
 
 type Status = { kind: 'idle' | 'error' | 'success'; message: string }
 
 export default function ContactForm({ vehicleLabel }: { vehicleLabel?: string }) {
   const [values, setValues] = useState({ name: '', email: '', phone: '', message: '' })
   const [status, setStatus] = useState<Status>({ kind: 'idle', message: '' })
+  const { locale, t } = useLocale()
 
   const update = (field: keyof typeof values) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setValues(previous => ({ ...previous, [field]: event.target.value }))
@@ -30,7 +32,8 @@ export default function ContactForm({ vehicleLabel }: { vehicleLabel?: string })
           name: values.name.trim(),
           email: values.email.trim(),
           phone: values.phone.trim() || undefined,
-          message: vehicleLabel ? `${values.message.trim()} (véhicule : ${vehicleLabel})` : values.message.trim(),
+          locale,
+          message: vehicleLabel ? `${values.message.trim()} ${t(`(véhicule : ${vehicleLabel})`)}` : values.message.trim(),
         },
       })
       setStatus({
@@ -46,6 +49,7 @@ export default function ContactForm({ vehicleLabel }: { vehicleLabel?: string })
   }
 
   return (
+    <T>
     <form className="contact-form" onSubmit={event => void submit(event)} noValidate>
       {vehicleLabel && <p className="form-context">À propos de : <span>{vehicleLabel}</span></p>}
       <div className="form-row">
@@ -76,5 +80,6 @@ export default function ContactForm({ vehicleLabel }: { vehicleLabel?: string })
         </p>
       </div>
     </form>
+    </T>
   )
 }

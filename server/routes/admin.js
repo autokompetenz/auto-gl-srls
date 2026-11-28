@@ -50,12 +50,9 @@ router.post(
     const { code } = validate(adminLoginSchema, req.body)
     if (!(await verifyAdminCode(code))) throw new HttpError(401, 'Code invalide')
 
-    // Le code ouvre une session pour le compte administrateur configuré ;
-    // aucun mot de passe n'est exposé ni vérifié côté navigateur.
-    const configuredEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase()
-    const user = configuredEmail
-      ? await prisma.user.findUnique({ where: { email: configuredEmail } })
-      : await prisma.user.findFirst({ where: { role: 'ADMIN' }, orderBy: { createdAt: 'asc' } })
+    // Le code ouvre une session pour le compte administrateur interne ;
+    // aucun e-mail ni mot de passe n'est exposé ni vérifié côté navigateur.
+    const user = await prisma.user.findFirst({ where: { role: 'ADMIN' }, orderBy: { createdAt: 'asc' } })
     if (!user || user.role !== 'ADMIN') {
       throw new HttpError(503, 'Aucun compte administrateur configuré')
     }

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { apiFetch, errorMessage } from '../lib/api'
 import { formatDate, formatEuro } from '../lib/format'
 import type { BankInfo, OrderDTO, OrderStatus, PaymentDTO } from '../types/features'
+import { T } from '../i18n'
 
 const statusLabels: Record<string, string> = {
   PENDING: 'En attente de validation',
@@ -68,6 +69,7 @@ export default function OrderDetail({ order }: { order: OrderDTO }) {
   }, [showBank, order.id])
 
   return (
+    <T>
     <div className="order-detail">
       <div className="order-detail-head">
         <div>
@@ -185,5 +187,6 @@ export default function OrderDetail({ order }: { order: OrderDTO }) {
         )}
       </div>
     </div>
+    </T>
   )
 }

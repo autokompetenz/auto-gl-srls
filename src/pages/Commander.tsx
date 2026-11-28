@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ArrowLeft, ShieldCheck } from 'lucide-react'
 import { useVehicles } from '../context/VehiclesContext'
+import { T, useLocale } from '../i18n'
 import type { Navigate } from '../hooks/useRoute'
 import { apiFetch, errorMessage } from '../lib/api'
 import {
@@ -44,6 +45,7 @@ const initialValues: FormValues = {
 
 export default function Commander({ id, navigate }: { id: string; navigate: Navigate }) {
   const { vehicleById, loading } = useVehicles()
+  const { locale } = useLocale()
   const [values, setValues] = useState<FormValues>(initialValues)
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
   const [error, setError] = useState('')
@@ -81,6 +83,7 @@ export default function Commander({ id, navigate }: { id: string; navigate: Navi
           postalCode: values.postalCode.trim(),
           city: values.city.trim(),
           country: values.country.trim() || 'France',
+          locale,
           notes: values.notes.trim() || undefined,
           purchaseType: values.purchaseType,
           deliveryType: values.deliveryType,
@@ -97,21 +100,25 @@ export default function Commander({ id, navigate }: { id: string; navigate: Navi
 
   if (!vehicle && loading) {
     return (
+      <T>
       <div className="page shell empty-state">
         <p className="eyebrow">Chargement</p>
         <h1>Chargement du véhicule…</h1>
       </div>
+      </T>
     )
   }
 
   if (!vehicle) {
     return (
+      <T>
       <div className="page shell empty-state not-found">
         <p className="eyebrow">Véhicule introuvable</p>
         <h1>Ce véhicule n’est plus disponible.</h1>
         <p>Retrouvez les véhicules actuellement proposés dans le catalogue.</p>
         <a className="btn btn-primary" href="/catalogue">Retour au catalogue</a>
       </div>
+      </T>
     )
   }
 
@@ -143,6 +150,7 @@ export default function Commander({ id, navigate }: { id: string; navigate: Navi
           }
 
   return (
+    <T>
     <div className="page shell checkout-page">
       <a className="back-link" href={`/vehicule/${encodeURIComponent(vehicle.id)}`}>
         <ArrowLeft size={17} aria-hidden="true" /> Retour au véhicule
@@ -228,5 +236,6 @@ export default function Commander({ id, navigate }: { id: string; navigate: Navi
         </aside>
       </div>
     </div>
+    </T>
   )
 }

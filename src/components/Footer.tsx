@@ -1,7 +1,9 @@
 import { company, companyAddress } from '../data/company'
+import { T } from '../i18n'
 
 export default function Footer() {
   return (
+    <T>
     <footer className="site-footer">
       <div className="shell footer-inner">
         <div className="footer-brand">
@@ -33,5 +35,6 @@ export default function Footer() {
         <span>Design original publié sous licence MIT · Amir Mušić</span>
       </div>
     </footer>
+    </T>
   )
 }

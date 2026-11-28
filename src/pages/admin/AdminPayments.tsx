@@ -3,6 +3,7 @@ import { adminList } from '../../lib/admin'
 import { apiFetch, errorMessage } from '../../lib/api'
 import { formatDate, formatEuro } from '../../lib/format'
 import type { PaymentDTO } from '../../types/features'
+import { T } from '../../i18n'
 
 type PaymentRow = PaymentDTO & { orderNumber?: string; customerName?: string }
 
@@ -56,45 +57,47 @@ export default function AdminPayments() {
   }
 
   return (
-    <div className="admin-panel">
-      <div className="admin-panel-head">
-        <h2>Paiements</h2>
-        <button type="button" className="btn btn-ghost" onClick={() => void load()} disabled={status === 'loading'}>
-          {status === 'loading' ? 'Chargement…' : 'Actualiser'}
-        </button>
-      </div>
-      {error && <p className="form-status error" role="alert">{error}</p>}
-      {status === 'loading' ? (
-        <p className="form-status" role="status">Chargement des paiements…</p>
-      ) : payments.length ? (
-        <div className="table-scroll">
-          <table className="table-list">
-            <thead><tr><th scope="col">Référence</th><th scope="col">Commande</th><th scope="col">Échéance</th><th scope="col">Montant</th><th scope="col">Statut</th></tr></thead>
-            <tbody>
-              {payments.map(payment => (
-                <tr key={payment.id}>
-                  <td><strong>{payment.installmentNumber ? `Échéance ${payment.installmentNumber}` : payment.type}</strong><small>{payment.id}</small></td>
-                  <td>{payment.orderNumber || payment.customerName || '—'}</td>
-                  <td>{formatDate(payment.dueDate)}</td>
-                  <td>{formatEuro(payment.amount)}</td>
-                  <td>
-                    <select
-                      value={payment.status}
-                      disabled={savingId === payment.id}
-                      onChange={event => void update(payment, event.target.value)}
-                      aria-label={`Statut du paiement ${payment.id}`}
-                    >
-                      {statuses.map(item => <option key={item} value={item}>{item}</option>)}
-                    </select>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+    <T>
+      <div className="admin-panel">
+        <div className="admin-panel-head">
+          <h2>Paiements</h2>
+          <button type="button" className="btn btn-ghost" onClick={() => void load()} disabled={status === 'loading'}>
+            {status === 'loading' ? 'Chargement…' : 'Actualiser'}
+          </button>
         </div>
-      ) : (
-        <p className="form-context">Aucun paiement renvoyé par l’API.</p>
-      )}
-    </div>
+        {error && <p className="form-status error" role="alert">{error}</p>}
+        {status === 'loading' ? (
+          <p className="form-status" role="status">Chargement des paiements…</p>
+        ) : payments.length ? (
+          <div className="table-scroll">
+            <table className="table-list">
+              <thead><tr><th scope="col">Référence</th><th scope="col">Commande</th><th scope="col">Échéance</th><th scope="col">Montant</th><th scope="col">Statut</th></tr></thead>
+              <tbody>
+                {payments.map(payment => (
+                  <tr key={payment.id}>
+                    <td><strong>{payment.installmentNumber ? `Échéance ${payment.installmentNumber}` : payment.type}</strong><small>{payment.id}</small></td>
+                    <td>{payment.orderNumber || payment.customerName || '—'}</td>
+                    <td>{formatDate(payment.dueDate)}</td>
+                    <td>{formatEuro(payment.amount)}</td>
+                    <td>
+                      <select
+                        value={payment.status}
+                        disabled={savingId === payment.id}
+                        onChange={event => void update(payment, event.target.value)}
+                        aria-label={`Statut du paiement ${payment.id}`}
+                      >
+                        {statuses.map(item => <option key={item} value={item}>{item}</option>)}
+                      </select>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="form-context">Aucun paiement renvoyé par l’API.</p>
+        )}
+      </div>
+    </T>
   )
 }

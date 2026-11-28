@@ -7,6 +7,7 @@ import { useVehicles } from '../context/VehiclesContext'
 import type { Compare } from '../hooks/useCompare'
 import type { Favorites } from '../hooks/useFavorites'
 import { formatEuro, formatKm } from '../lib/format'
+import { T } from '../i18n'
 
 export default function VehicleDetail({ id, favorites, compare }: { id: string; favorites: Favorites; compare: Compare }) {
   const { vehicles, vehicleById, loading } = useVehicles()
@@ -17,21 +18,25 @@ export default function VehicleDetail({ id, favorites, compare }: { id: string; 
 
   if (!vehicle && loading) {
     return (
+      <T>
       <div className="page shell empty-state">
         <p className="eyebrow">Chargement</p>
         <h1>Chargement du véhicule…</h1>
       </div>
+      </T>
     )
   }
 
   if (!vehicle) {
     return (
+      <T>
       <div className="page shell empty-state not-found">
         <p className="eyebrow">Annonce introuvable</p>
         <h1>Ce véhicule n’est plus disponible.</h1>
         <p>Il a peut-être été retiré de la sélection. Retrouvez les véhicules actuellement proposés.</p>
         <a className="btn btn-primary" href="/catalogue">Retour au catalogue</a>
       </div>
+      </T>
     )
   }
 
@@ -48,6 +53,7 @@ export default function VehicleDetail({ id, favorites, compare }: { id: string; 
   const isFavorite = favorites.has(vehicle.id)
 
   return (
+    <T>
     <div className="page shell detail-page">
       <a className="back-link" href="/catalogue"><ArrowLeft size={17} aria-hidden="true" /> Retour au catalogue</a>
 
@@ -192,5 +198,6 @@ export default function VehicleDetail({ id, favorites, compare }: { id: string; 
         </div>
       </section>
     </div>
+    </T>
   )
 }

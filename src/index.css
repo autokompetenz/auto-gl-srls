@@ -298,6 +298,12 @@ input[type='range'] { width: 100%; accent-color: var(--acid); }
 .footer-group a:hover { color: var(--white); }
 .footer-baseline { display: flex; justify-content: space-between; gap: 16px; padding: 18px 0 26px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
 
+/* Language selector */
+.language-switcher { display: inline-flex; align-items: center; gap: 2px; padding: 3px; border: 1px solid var(--line); border-radius: 999px; background: #ffffff0d; }
+.language-link { display: inline-grid; place-items: center; min-width: 32px; height: 30px; border-radius: 999px; color: var(--muted); font-size: 11px; letter-spacing: .06em; transition: background 180ms, color 180ms; }
+.language-link:hover { color: var(--white); background: #ffffff16; }
+.language-link.active { background: var(--acid); color: var(--on-acid); }
+
 /* New shared controls */
 .header-counters { display: flex; align-items: center; gap: 10px; margin-left: auto; }
 .compare-counter { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-width: 56px; min-height: 44px; border-radius: 999px; border: 1px solid var(--line); background: #ffffff0d; font-size: 14px; }
@@ -551,10 +557,11 @@ fieldset legend { margin-bottom: 14px; color: var(--acid); font-size: 13px; lett
 @media (max-width: 900px) {
   /* Navigation repliable : la barre horizontale du desktop devient un menu. */
   .header-inner { height: auto; min-height: 68px; flex-wrap: wrap; gap: 10px; padding-block: 0; }
-  .header-counters { order: 2; margin-left: auto; gap: 8px; }
-  .menu-toggle { order: 3; display: grid; }
+  .language-switcher { order: 2; margin-left: auto; }
+  .header-counters { order: 3; margin-left: 0; gap: 8px; }
+  .menu-toggle { order: 4; display: grid; }
   .main-nav {
-    order: 4;
+    order: 5;
     display: none;
     width: 100%;
     margin-left: 0;
