@@ -25,7 +25,7 @@ export default function Footer() {
           <h2>Informations</h2>
           <span>REA {company.rea} · ATECO {company.ateco}</span>
           <span>Prix affichés en EUR</span>
-          <span>Commandes et alertes via l’API</span>
+          <span>Suivi de commande et alertes en ligne</span>
         </div>
       </div>
       <div className="shell footer-baseline">

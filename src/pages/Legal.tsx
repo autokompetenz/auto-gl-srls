@@ -38,7 +38,7 @@ export default function Legal() {
         </section>
         <aside className="legal-aside">
           <h2>Catalogue AUTO GL SRLS</h2>
-          <p>Les véhicules, prix et disponibilités présentés ici sont des exemples de démonstration. Les formulaires sont traités par l’API ; favoris et comparateur restent locaux à ce navigateur.</p>
+          <p>Les véhicules, prix et disponibilités présentés ici sont des exemples de démonstration. Vos demandes sont traitées par notre équipe ; favoris et comparateur sont conservés sur cet appareil.</p>
           <p>Les visuels utilisés proviennent d’un design study placé sous licence MIT ; voir LICENSE.</p>
           <a className="btn btn-ghost" href="/contact">Revenir au contact</a>
         </aside>

@@ -74,7 +74,7 @@ export async function apiFetch<T>(path: string, options: ApiFetchOptions = {}): 
   try {
     response = await fetch(apiPath(path), { ...rest, headers, body: payload })
   } catch {
-    throw new ApiError(0, 'API indisponible. Vérifiez que le serveur est démarré (pnpm dev:full).')
+    throw new ApiError(0, 'Le service est momentanément indisponible. Veuillez réessayer dans quelques instants.')
   }
 
   if (!response.ok) {

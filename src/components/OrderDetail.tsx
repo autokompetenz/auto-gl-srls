@@ -145,7 +145,7 @@ export default function OrderDetail({ order }: { order: OrderDTO }) {
               </table>
             </div>
           ) : (
-            <p className="form-context">Aucune échéance enregistrée pour le moment.</p>
+            <p className="form-context">Aucun paiement prévu pour le moment.</p>
           )}
         </section>
 

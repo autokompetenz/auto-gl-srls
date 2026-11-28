@@ -7,7 +7,7 @@ export default function OrderConfirm({ orderNumber }: { orderNumber: string }) {
         <CheckCircle2 size={44} aria-hidden="true" />
         <p className="eyebrow">Commande enregistrée</p>
         <h1>Merci pour votre commande.</h1>
-        <p>Votre commande est enregistrée côté serveur. Un e-mail sera envoyé si SMTP est configuré.</p>
+        <p>Votre commande a bien été enregistrée. Un e-mail de confirmation vous sera adressé.</p>
         <div className="order-number-block">
           <span>Numéro de commande</span>
           <strong>{orderNumber}</strong>

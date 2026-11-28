@@ -68,7 +68,7 @@ export default function OrderTracking({ orderNumber }: { orderNumber: string | n
           <OrderDetail order={order} />
         </section>
       ) : (
-        <p className="form-context">Les informations de suivi proviennent de l’API ; aucune commande n’est affichée sans vérification.</p>
+        <p className="form-context">Le suivi est affiché après vérification de votre numéro de commande et de votre adresse e-mail.</p>
       )}
     </div>
   )

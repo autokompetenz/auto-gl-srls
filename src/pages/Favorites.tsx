@@ -14,7 +14,7 @@ export default function Favorites({ favorites, compare }: { favorites: Favorites
         <div>
           <p className="eyebrow">Votre sélection</p>
           <h1>Mes favoris.</h1>
-          <p>Retrouvez ici les véhicules que vous avez mis de côté. La liste est conservée dans ce navigateur.</p>
+          <p>Retrouvez ici les véhicules que vous avez mis de côté. Votre liste est conservée sur cet appareil.</p>
         </div>
         {saved.length > 0 && (
           <button type="button" className="btn btn-ghost" onClick={favorites.clear}>Tout retirer</button>

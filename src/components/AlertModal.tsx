@@ -70,7 +70,7 @@ export default function AlertModal({
           <>
             <CheckCircle2 size={34} aria-hidden="true" />
             <h2 id="alert-modal-title">Alerte enregistrée</h2>
-            <p>{existing ? 'Cette alerte existait déjà : son lien de gestion est inchangé.' : 'Votre alerte a été créée.'} Un e-mail sera envoyé si SMTP est configuré.</p>
+            <p>{existing ? 'Cette alerte existait déjà : son lien de gestion est inchangé.' : 'Votre alerte a été créée.'} Vous recevrez un e-mail avec le lien pour la gérer.</p>
             <a className="btn btn-primary" href={`/alerte/${encodeURIComponent(token)}`}>Gérer mon alerte</a>
             <button type="button" className="btn btn-ghost" onClick={onClose}>Fermer</button>
           </>

@@ -163,7 +163,7 @@ export default function VehicleDetail({ id, favorites, compare }: { id: string; 
               <ShieldCheck size={20} aria-hidden="true" />
               <div>
                 <h2>Organiser un essai</h2>
-                <p>Votre demande est transmise à l’API. Un e-mail sera envoyé si SMTP est configuré.</p>
+                <p>Envoyez-nous vos disponibilités : nous vous répondrons au plus vite.</p>
               </div>
             </div>
             <ContactForm vehicleLabel={vehicle.name} />

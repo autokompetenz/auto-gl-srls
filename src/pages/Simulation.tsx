@@ -61,7 +61,7 @@ export default function Simulation({ favorites, compare }: { favorites: Favorite
         <div>
           <p className="eyebrow">Simulation</p>
           <h1>Quel budget pouvez-vous envisager ?</h1>
-          <p>Le serveur calcule une capacité mensuelle à partir de votre revenu et renvoie les véhicules de la sélection compatibles.</p>
+          <p>Nous estimons votre capacité mensuelle à partir de votre revenu et vous proposons les véhicules compatibles.</p>
         </div>
       </div>
 
@@ -109,7 +109,7 @@ export default function Simulation({ favorites, compare }: { favorites: Favorite
             </label>
           </div>
           <p className="form-context">
-            Hypothèse du serveur : capacité de {Math.round(MONTHLY_INCOME_RATIO * 100)} % du salaire, apport de {Math.round(DOWN_PAYMENT_RATE * 100)} %, {FINANCING_MONTHS} mensualités à 6 % annuel.
+            Notre estimation : capacité de {Math.round(MONTHLY_INCOME_RATIO * 100)} % du salaire, apport de {Math.round(DOWN_PAYMENT_RATE * 100)} %, {FINANCING_MONTHS} mensualités à 6 % annuel.
           </p>
           <div className="form-actions">
             <button type="submit" className="btn btn-primary" disabled={status === 'loading'}>
@@ -168,7 +168,7 @@ export default function Simulation({ favorites, compare }: { favorites: Favorite
             <div className="empty-state">
               <Calculator size={30} aria-hidden="true" />
               <h2>Votre estimation apparaîtra ici.</h2>
-              <p>Renseignez votre salaire puis lancez le calcul. Les résultats proviennent de l’API, aucune valeur n’est inventée côté navigateur.</p>
+              <p>Renseignez votre salaire puis lancez le calcul. Les résultats sont établis à partir des informations saisies.</p>
             </div>
           )}
         </section>

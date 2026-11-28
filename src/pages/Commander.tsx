@@ -151,7 +151,7 @@ export default function Commander({ id, navigate }: { id: string; navigate: Navi
         <div>
           <p className="eyebrow">Commande</p>
           <h1>Finaliser votre commande.</h1>
-          <p>Les informations sont transmises au serveur. La commande y est enregistrée avec un numéro de suivi.</p>
+          <p>Votre commande sera enregistrée avec un numéro de suivi à conserver.</p>
         </div>
       </div>
 
@@ -203,7 +203,7 @@ export default function Commander({ id, navigate }: { id: string; navigate: Navi
           </div>
           {status === 'error' && <p className="form-status error" role="alert">{error}</p>}
           <p className="form-context">
-            <ShieldCheck size={15} aria-hidden="true" /> La commande est enregistrée côté serveur. Un e-mail sera envoyé si SMTP est configuré.
+            <ShieldCheck size={15} aria-hidden="true" /> Votre commande est confirmée et un e-mail de suivi vous sera adressé.
           </p>
         </form>
 

@@ -36,8 +36,8 @@ export default function ContactForm({ vehicleLabel }: { vehicleLabel?: string })
       setStatus({
         kind: 'success',
         message: vehicleLabel
-          ? `Demande enregistrée pour ${vehicleLabel}. Un e-mail sera envoyé si SMTP est configuré.`
-          : 'Demande enregistrée. Un e-mail sera envoyé si SMTP est configuré.',
+          ? `Merci, votre demande concernant ${vehicleLabel} a bien été reçue. Nous vous répondrons au plus vite.`
+          : 'Merci, votre demande a bien été reçue. Nous vous répondrons au plus vite.',
       })
       setValues({ name: '', email: '', phone: '', message: '' })
     } catch (caught) {

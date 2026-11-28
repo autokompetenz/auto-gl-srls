@@ -30,7 +30,7 @@ export default function Compare({ compare }: { compare: CompareHook }) {
         <div>
           <p className="eyebrow">Comparateur</p>
           <h1>Comparez vos candidats.</h1>
-          <p>Jusqu’à trois véhicules, côte à côte. Le comparateur reste enregistré dans ce navigateur.</p>
+          <p>Jusqu’à trois véhicules, côte à côte. Votre sélection est conservée sur cet appareil.</p>
         </div>
         {selected.length > 0 && (
           <button type="button" className="btn btn-ghost" onClick={compare.clear}>
@@ -79,7 +79,7 @@ export default function Compare({ compare }: { compare: CompareHook }) {
               </tbody>
             </table>
           </div>
-          <p className="compare-note">Mensualité indicative calculée avec les hypothèses du simulateur : capacité 30 % du revenu, apport 25 %, 60 mensualités à 6 % annuel. Le montant définitif est calculé par l’API.</p>
+          <p className="compare-note">Mensualité indicative calculée avec les hypothèses du simulateur : capacité 30 % du revenu, apport 15 %, 60 mensualités à 6 % annuel. Le montant définitif est communiqué lors de la commande.</p>
         </>
       ) : (
         <div className="empty-state">
