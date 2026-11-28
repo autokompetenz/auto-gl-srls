@@ -1,13 +1,15 @@
-import { ArrowRight, ShieldCheck, ClipboardCheck, CalendarCheck } from 'lucide-react'
+import { ArrowRight, Search, CarFront, CreditCard, Mail, MapPin } from 'lucide-react'
 import VehicleCard from '../components/VehicleCard'
 import { useVehicles } from '../context/VehiclesContext'
 import type { Compare } from '../hooks/useCompare'
 import type { Favorites } from '../hooks/useFavorites'
 
 const steps = [
-  { icon: ClipboardCheck, title: 'Choisir', text: 'Filtrez par prix, année, kilométrage, couleur ou type de jantes.' },
-  { icon: CalendarCheck, title: 'Essayer', text: 'Sélectionnez un véhicule et préparez une demande d’essai en quelques secondes.' },
-  { icon: ShieldCheck, title: 'Repartir', text: 'Chaque annonce affiche clairement sa garantie, son historique et sa localisation.' },
+  { icon: Search, title: 'Explorer sans compte', text: 'Accédez au catalogue sans inscription et préparez votre choix à votre rythme.' },
+  { icon: CarFront, title: 'Choisir un véhicule', text: 'Filtrez par prix, année, kilométrage, couleur ou type de jantes, puis consultez chaque fiche en détail.' },
+  { icon: CreditCard, title: 'Commander', text: 'Sélectionnez le financement souhaité et validez votre commande en quelques clics.' },
+  { icon: Mail, title: 'Email de confirmation', text: 'Recevez votre bon de commande avec son numéro unique directement par email.' },
+  { icon: MapPin, title: 'Suivre votre commande', text: 'Suivez chaque étape en temps réel sur notre page de suivi.' },
 ]
 
 export default function Home({ favorites, compare }: { favorites: Favorites; compare: Compare }) {
@@ -65,13 +67,14 @@ export default function Home({ favorites, compare }: { favorites: Favorites; com
         <div className="section-head">
           <div>
             <p className="eyebrow">Comment ça marche</p>
-            <h2>Un parcours simple, sans surprise.</h2>
+            <h2>De la commande à la livraison</h2>
+            <p className="steps-lead">Commandez votre véhicule en quelques minutes, suivez chaque étape depuis votre email.</p>
           </div>
         </div>
         <div className="steps-grid">
           {steps.map((step, index) => (
             <article className="step-card" key={step.title}>
-              <span className="step-number">0{index + 1}</span>
+              <span className="step-number">Étape {String(index + 1).padStart(2, '0')}</span>
               <step.icon size={24} aria-hidden="true" />
               <h3>{step.title}</h3>
               <p>{step.text}</p>

@@ -115,11 +115,12 @@ main { flex: 1; }
 .card-link:hover { color: var(--acid); }
 
 /* Steps */
-.steps-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+.steps-lead { max-width: 70ch; margin-top: 12px; color: var(--muted); font-size: 16px; line-height: 1.6; }
+.steps-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 18px; }
 .step-card { position: relative; padding: 26px; border: 1px solid var(--line); border-radius: 16px; background: #ffffff0a; }
 .step-card svg { color: var(--acid); }
-.step-number { position: absolute; top: 18px; right: 20px; color: #ffffff50; font-size: 24px; }
-.step-card h3 { margin-top: 18px; font-size: 20px; }
+.step-number { position: absolute; top: 18px; right: 20px; color: #ffffff70; font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+.step-card h3 { margin-top: 18px; font-size: 18px; }
 .step-card p { margin-top: 10px; font-size: 14px; line-height: 1.6; color: var(--muted); }
 
 /* Page head and catalogue */
@@ -476,6 +477,7 @@ fieldset legend { margin-bottom: 14px; color: var(--acid); font-size: 13px; lett
 
 /* Adaptive layout */
 @media (max-width: 1100px) {
+  .steps-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .simulation-layout, .checkout-layout { grid-template-columns: 1fr; }
   .order-summary { position: static; }
   .admin-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -507,7 +509,7 @@ fieldset legend { margin-bottom: 14px; color: var(--acid); font-size: 13px; lett
 
   .hero { grid-template-columns: 1fr; gap: 44px; }
   .hero-visual { max-width: 640px; }
-  .vehicle-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .vehicle-grid, .steps-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .simulation-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .simulation-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .stepper { gap: 4px; }
