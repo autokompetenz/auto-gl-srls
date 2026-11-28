@@ -14,8 +14,8 @@ export default function OrderConfirm({ orderNumber }: { orderNumber: string }) {
         </div>
         <p className="form-context">Conservez ce numéro : il permet de suivre l’avancement de votre commande avec votre adresse e-mail.</p>
         <div className="form-actions">
-          <a className="btn btn-primary" href={`#/suivi/${encodeURIComponent(orderNumber)}`}>Suivre ma commande</a>
-          <a className="btn btn-ghost" href="#/catalogue">Retour au catalogue</a>
+          <a className="btn btn-primary" href={`/suivi/${encodeURIComponent(orderNumber)}`}>Suivre ma commande</a>
+          <a className="btn btn-ghost" href="/catalogue">Retour au catalogue</a>
         </div>
       </div>
     </div>

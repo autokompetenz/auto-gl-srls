@@ -158,7 +158,7 @@ export default function Simulation({ favorites, compare }: { favorites: Favorite
                   <Search size={28} aria-hidden="true" />
                   <h3>Aucun véhicule ne correspond à ce budget.</h3>
                   <p>Essayez d’augmenter le salaire ou l’apport, puis relancez la simulation.</p>
-                  <a className="btn btn-ghost" href="#/catalogue">Voir le catalogue</a>
+                  <a className="btn btn-ghost" href="/catalogue">Voir le catalogue</a>
                 </div>
               )}
             </>

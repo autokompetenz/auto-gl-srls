@@ -99,7 +99,7 @@ export default function AlertManage({ token, navigate }: { token: string; naviga
             <button type="button" className="btn btn-ghost" onClick={() => void remove()}>
               <Trash2 size={16} aria-hidden="true" /> Supprimer l’alerte
             </button>
-            <a className="btn btn-ghost" href="#/catalogue">Retour au catalogue</a>
+            <a className="btn btn-ghost" href="/catalogue">Retour au catalogue</a>
           </div>
         </div>
       )}

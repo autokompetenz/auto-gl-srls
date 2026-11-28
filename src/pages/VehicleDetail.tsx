@@ -30,7 +30,7 @@ export default function VehicleDetail({ id, favorites, compare }: { id: string; 
         <p className="eyebrow">Annonce introuvable</p>
         <h1>Ce véhicule n’est plus disponible.</h1>
         <p>Il a peut-être été retiré de la sélection. Retrouvez les véhicules actuellement proposés.</p>
-        <a className="btn btn-primary" href="#/catalogue">Retour au catalogue</a>
+        <a className="btn btn-primary" href="/catalogue">Retour au catalogue</a>
       </div>
     )
   }
@@ -49,7 +49,7 @@ export default function VehicleDetail({ id, favorites, compare }: { id: string; 
 
   return (
     <div className="page shell detail-page">
-      <a className="back-link" href="#/catalogue"><ArrowLeft size={17} aria-hidden="true" /> Retour au catalogue</a>
+      <a className="back-link" href="/catalogue"><ArrowLeft size={17} aria-hidden="true" /> Retour au catalogue</a>
 
       <div className="detail-head">
         <div>
@@ -131,10 +131,10 @@ export default function VehicleDetail({ id, favorites, compare }: { id: string; 
             <div className="price-badges">
               {vehicle.badges.map(badge => <span key={badge}>{badge}</span>)}
             </div>
-            <a className="btn btn-primary checkout-cta" href={`#/commander/${encodeURIComponent(vehicle.id)}`}>
+            <a className="btn btn-primary checkout-cta" href={`/commander/${encodeURIComponent(vehicle.id)}`}>
               Commander ce véhicule
             </a>
-            <a className="text-link" href="#/simulation">Simuler mon budget</a>
+            <a className="text-link" href="/simulation">Simuler mon budget</a>
           </div>
 
           <div className="spec-card">

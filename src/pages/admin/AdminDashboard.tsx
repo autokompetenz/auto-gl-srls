@@ -57,9 +57,9 @@ export default function AdminDashboard() {
         </div>
       )}
       <nav className="admin-quick-links" aria-label="Accès rapide">
-        <a className="btn btn-ghost" href="#/admin/vehicules">Gérer les véhicules</a>
-        <a className="btn btn-ghost" href="#/admin/commandes">Traiter les commandes</a>
-        <a className="btn btn-ghost" href="#/admin/parametres">Coordonnées bancaires</a>
+        <a className="btn btn-ghost" href="/admin/vehicules">Gérer les véhicules</a>
+        <a className="btn btn-ghost" href="/admin/commandes">Traiter les commandes</a>
+        <a className="btn btn-ghost" href="/admin/parametres">Coordonnées bancaires</a>
       </nav>
     </div>
   )

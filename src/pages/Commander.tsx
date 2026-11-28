@@ -102,14 +102,14 @@ export default function Commander({ id, navigate }: { id: string; navigate: Navi
         <p className="eyebrow">Véhicule introuvable</p>
         <h1>Ce véhicule n’est plus disponible.</h1>
         <p>Retrouvez les véhicules actuellement proposés dans le catalogue.</p>
-        <a className="btn btn-primary" href="#/catalogue">Retour au catalogue</a>
+        <a className="btn btn-primary" href="/catalogue">Retour au catalogue</a>
       </div>
     )
   }
 
   return (
     <div className="page shell checkout-page">
-      <a className="back-link" href={`#/vehicule/${encodeURIComponent(vehicle.id)}`}>
+      <a className="back-link" href={`/vehicule/${encodeURIComponent(vehicle.id)}`}>
         <ArrowLeft size={17} aria-hidden="true" /> Retour au véhicule
       </a>
       <div className="page-head">
@@ -164,7 +164,7 @@ export default function Commander({ id, navigate }: { id: string; navigate: Navi
             <button type="submit" className="btn btn-primary" disabled={status === 'loading'}>
               {status === 'loading' ? 'Enregistrement…' : 'Envoyer la commande'}
             </button>
-            <a className="btn btn-ghost" href="#/catalogue">Annuler</a>
+            <a className="btn btn-ghost" href="/catalogue">Annuler</a>
           </div>
           {status === 'error' && <p className="form-status error" role="alert">{error}</p>}
           <p className="form-context">

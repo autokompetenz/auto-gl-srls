@@ -39,7 +39,7 @@ export default function Contact() {
           </div>
           <p className="contact-note">
             Le formulaire transmet votre demande à notre adresse professionnelle. Les informations légales affichées correspondent à {company.name}.{' '}
-            <a href="#/mentions-legales">Voir les mentions légales</a>.
+            <a href="/mentions-legales">Voir les mentions légales</a>.
           </p>
         </aside>
       </div>

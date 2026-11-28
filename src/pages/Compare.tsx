@@ -70,7 +70,7 @@ export default function Compare({ compare }: { compare: CompareHook }) {
                   <th scope="row">Action</th>
                   {selected.map(vehicle => (
                     <td key={vehicle.id} data-vehicle={vehicle.name}>
-                      <a className="text-link" href={`#/commander/${encodeURIComponent(vehicle.id)}`}>
+                      <a className="text-link" href={`/commander/${encodeURIComponent(vehicle.id)}`}>
                         Commander <ArrowRight size={15} aria-hidden="true" />
                       </a>
                     </td>
@@ -85,7 +85,7 @@ export default function Compare({ compare }: { compare: CompareHook }) {
         <div className="empty-state">
           <h2>Aucun véhicule à comparer.</h2>
           <p>Ajoutez jusqu’à trois véhicules depuis le catalogue ou une fiche véhicule.</p>
-          <a className="btn btn-primary" href="#/catalogue">Découvrir le catalogue</a>
+          <a className="btn btn-primary" href="/catalogue">Découvrir le catalogue</a>
         </div>
       )}
     </div>

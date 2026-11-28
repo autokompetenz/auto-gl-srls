@@ -10,16 +10,16 @@ export default function Footer() {
         </div>
         <div className="footer-group">
           <h2>Explorer</h2>
-          <a href="#/catalogue">Catalogue</a>
-          <a href="#/favoris">Favoris</a>
-          <a href="#/comparateur">Comparateur</a>
-          <a href="#/simulation">Simulation</a>
-          <a href="#/contact">Nous contacter</a>
+          <a href="/catalogue">Catalogue</a>
+          <a href="/favoris">Favoris</a>
+          <a href="/comparateur">Comparateur</a>
+          <a href="/simulation">Simulation</a>
+          <a href="/contact">Nous contacter</a>
         </div>
         <div className="footer-group">
           <h2>Commandes</h2>
-          <a href="#/suivi">Suivre une commande</a>
-          <a href="#/mentions-legales">Mentions légales</a>
+          <a href="/suivi">Suivre une commande</a>
+          <a href="/mentions-legales">Mentions légales</a>
         </div>
         <div className="footer-group">
           <h2>Informations</h2>

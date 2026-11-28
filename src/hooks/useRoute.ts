@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 
+export const routeChangeEvent = 'auto-gl-srls:routechange'
+
 export const adminSections = ['dashboard', 'vehicles', 'orders', 'clients', 'payments', 'settings'] as const
 export type AdminSection = (typeof adminSections)[number]
 
@@ -49,6 +51,10 @@ function resolveAdminSection(value: string): AdminSection {
   return adminSectionAliases[value] ?? (isAdminSection(value) ? value : 'dashboard')
 }
 
+function cleanPath(path: string): string {
+  return (path || '/').replace(/\/+$/, '') || '/'
+}
+
 function segment(path: string, prefix: string): string | null {
   if (!path.startsWith(prefix)) return null
   const value = path.slice(prefix.length)
@@ -58,18 +64,28 @@ function segment(path: string, prefix: string): string | null {
 /** Anciennes pages supprimées : les liens/bookmarks reviennent à l'accueil. */
 const removedPaths = new Set(['/connexion', '/mes-commandes'])
 
-function normalizeLegacyHash(): void {
-  const raw = window.location.hash.replace(/^#/, '').split('?', 1)[0]
-  const path = (raw || '/').replace(/\/+$/, '') || '/'
-  if (removedPaths.has(path)) {
-    window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}#/`)
+/** Redirige les anciennes URL en `#/...` vers des URL propres, sans '#'. */
+function normalizeUrl(): void {
+  const hash = window.location.hash.replace(/^#/, '')
+  if (hash) {
+    const [hashPath = '/', hashSearch = ''] = hash.split('?', 2)
+    const path = removedPaths.has(cleanPath(hashPath)) ? '/' : cleanPath(hashPath)
+    const query = hashSearch ? `?${hashSearch}` : ''
+    window.history.replaceState(null, '', `${path}${query}`)
+    return
+  }
+
+  const path = cleanPath(window.location.pathname)
+  const target = removedPaths.has(path) ? '/' : path
+  const url = `${target}${window.location.search}`
+  if (url !== `${window.location.pathname}${window.location.search}`) {
+    window.history.replaceState(null, '', url)
   }
 }
 
-export function parseHash(): Route {
-  const raw = window.location.hash.replace(/^#/, '') || '/'
-  const [pathPart, queryPart = ''] = raw.split('?', 2)
-  const path = (pathPart || '/').replace(/\/+$/, '') || '/'
+export function parseRoute(): Route {
+  const path = cleanPath(window.location.pathname)
+  const queryPart = window.location.search.replace(/^\?/, '')
 
   if (path === '/' || path === '') return { page: 'home' }
   if (path === '/catalogue') return { page: 'catalogue' }
@@ -108,27 +124,39 @@ export function parseHash(): Route {
   return { page: 'home' }
 }
 
+/** Conservé pour les imports existants : le routage n'utilise plus le hash. */
+export const parseHash = parseRoute
+
 export function useRoute() {
-  const [route, setRoute] = useState<Route>(parseHash)
+  const [route, setRoute] = useState<Route>(() => {
+    normalizeUrl()
+    return parseRoute()
+  })
 
   useEffect(() => {
     const update = () => {
-      normalizeLegacyHash()
-      setRoute(parseHash())
+      normalizeUrl()
+      setRoute(parseRoute())
       window.scrollTo({ top: 0, behavior: 'auto' })
     }
-    normalizeLegacyHash()
-    window.addEventListener('hashchange', update)
-    return () => window.removeEventListener('hashchange', update)
+    window.addEventListener('popstate', update)
+    window.addEventListener(routeChangeEvent, update)
+    return () => {
+      window.removeEventListener('popstate', update)
+      window.removeEventListener(routeChangeEvent, update)
+    }
   }, [])
 
   const navigate = (path: string) => {
-    const next = path.startsWith('/') ? path : `/${path}`
-    if (window.location.hash === `#${next}`) {
+    const target = path.startsWith('/') ? path : `/${path}`
+    const [pathPart, queryPart = ''] = target.split('?', 2)
+    const url = `${cleanPath(pathPart)}${queryPart ? `?${queryPart}` : ''}`
+    if (`${window.location.pathname}${window.location.search}` === url) {
       window.scrollTo({ top: 0, behavior: 'auto' })
       return
     }
-    window.location.hash = next
+    window.history.pushState(null, '', url)
+    window.dispatchEvent(new Event(routeChangeEvent))
   }
 
   return { route, navigate }

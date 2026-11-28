@@ -22,7 +22,7 @@ Le seed (`tsx prisma/seed.js`) importe `src/data/vehicles.ts`, synchronise les 8
 Le compte admin reçoit un mot de passe aléatoire non affiché : la connexion se fait
 **uniquement** par `{code}`, comparé au hash bcrypt.
 Les coordonnées bancaires ne sont **pas** semées : elles sont saisies uniquement
-dans l'espace admin (`#/admin/parametres`) via `PUT /api/admin/bank` et stockées en base.
+dans l'espace admin (`/admin/parametres`) via `PUT /api/admin/bank` et stockées en base.
 
 `pnpm dev:full` lance l'API (port 3001 par défaut) et Vite (port 5221) ; Vite proxifie `/api`.
 

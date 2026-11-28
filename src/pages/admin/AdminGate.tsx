@@ -89,7 +89,7 @@ export default function AdminGate({ section }: { section: AdminSection }) {
             </button>
             {status === 'error' && <p className="form-status error" role="alert">{error}</p>}
           </form>
-          <a className="btn btn-ghost" href="#/">Retour à l’accueil</a>
+          <a className="btn btn-ghost" href="/">Retour à l’accueil</a>
         </div>
       </div>
     )

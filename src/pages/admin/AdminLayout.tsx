@@ -5,12 +5,12 @@ import type { AdminSection } from '../../hooks/useRoute'
 type Item = { section: AdminSection; href: string; label: string }
 
 const items: Item[] = [
-  { section: 'dashboard', href: '#/admin', label: 'Tableau de bord' },
-  { section: 'vehicles', href: '#/admin/vehicules', label: 'Véhicules' },
-  { section: 'orders', href: '#/admin/commandes', label: 'Commandes' },
-  { section: 'clients', href: '#/admin/clients', label: 'Clients' },
-  { section: 'payments', href: '#/admin/paiements', label: 'Paiements' },
-  { section: 'settings', href: '#/admin/parametres', label: 'Paramètres' },
+  { section: 'dashboard', href: '/admin', label: 'Tableau de bord' },
+  { section: 'vehicles', href: '/admin/vehicules', label: 'Véhicules' },
+  { section: 'orders', href: '/admin/commandes', label: 'Commandes' },
+  { section: 'clients', href: '/admin/clients', label: 'Clients' },
+  { section: 'payments', href: '/admin/paiements', label: 'Paiements' },
+  { section: 'settings', href: '/admin/parametres', label: 'Paramètres' },
 ]
 
 export default function AdminLayout({ section, children }: { section: AdminSection; children: React.ReactNode }) {

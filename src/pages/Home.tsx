@@ -131,8 +131,8 @@ export default function Home({ favorites, compare }: { favorites: Favorites; com
           <h1>Électrique,<br />autrement.</h1>
           <p className="hero-lead">Une sélection de véhicules AUTO GL d’occasion, présentée avec des informations claires et des vues détaillées. Comparez, choisissez, réservez un essai.</p>
           <div className="hero-actions">
-            <a className="btn btn-primary" href="#/catalogue">Voir le catalogue <ArrowRight size={17} aria-hidden="true" /></a>
-            <a className="btn btn-ghost" href="#/favoris">Mes favoris ({favorites.ids.length})</a>
+            <a className="btn btn-primary" href="/catalogue">Voir le catalogue <ArrowRight size={17} aria-hidden="true" /></a>
+            <a className="btn btn-ghost" href="/favoris">Mes favoris ({favorites.ids.length})</a>
           </div>
           <dl className="hero-stats">
             <div><dt>{vehicles.length}</dt><dd>véhicules en stock</dd></div>
@@ -154,7 +154,7 @@ export default function Home({ favorites, compare }: { favorites: Favorites; com
             <p className="eyebrow">À la une</p>
             <h2>Notre sélection du moment</h2>
           </div>
-          <a className="text-link" href="#/catalogue">Tout le catalogue <ArrowRight size={16} aria-hidden="true" /></a>
+          <a className="text-link" href="/catalogue">Tout le catalogue <ArrowRight size={16} aria-hidden="true" /></a>
         </div>
         <div className="vehicle-grid featured-grid">
           {featured.map(vehicle => (
@@ -231,7 +231,7 @@ export default function Home({ favorites, compare }: { favorites: Favorites; com
               <ul className="protection-points">
                 {protection.points.map(point => <li key={point}>{point}</li>)}
               </ul>
-              <a className="text-link" href="#/contact">En savoir plus <ArrowRight size={16} aria-hidden="true" /></a>
+              <a className="text-link" href="/contact">En savoir plus <ArrowRight size={16} aria-hidden="true" /></a>
             </article>
           ))}
         </div>

@@ -2,7 +2,7 @@ import { prisma } from './prisma.js'
 
 /**
  * Coordonnées bancaires actives : exclusivement saisies dans l'espace admin
- * (#/admin/parametres) puis enregistrées en base. Aucun repli via .env.
+ * (/admin/parametres) puis enregistrées en base. Aucun repli via .env.
  */
 export async function getStoredBank() {
   return prisma.bankInfo.findFirst({

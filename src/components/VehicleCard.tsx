@@ -17,7 +17,7 @@ export default function VehicleCard({
 }) {
   return (
     <article className="vehicle-card">
-      <a className="vehicle-media" href={`#/vehicule/${vehicle.id}`} aria-label={`Voir ${vehicle.name}`}>
+      <a className="vehicle-media" href={`/vehicule/${vehicle.id}`} aria-label={`Voir ${vehicle.name}`}>
         <img src={vehicle.image} alt={`${vehicle.name} ${vehicle.color}`} loading="lazy" />
         <span className="vehicle-year">{vehicle.year}</span>
       </a>
@@ -61,7 +61,7 @@ export default function VehicleCard({
         </div>
         <div className="vehicle-footer">
           <strong>{formatEuro(vehicle.price)}</strong>
-          <a className="card-link" href={`#/vehicule/${vehicle.id}`}>
+          <a className="card-link" href={`/vehicule/${vehicle.id}`}>
             Voir le véhicule <ArrowUpRight size={16} aria-hidden="true" />
           </a>
         </div>

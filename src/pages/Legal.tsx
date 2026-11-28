@@ -40,7 +40,7 @@ export default function Legal() {
           <h2>Catalogue AUTO GL SRLS</h2>
           <p>Les véhicules, prix et disponibilités présentés ici sont des exemples de démonstration. Les formulaires sont traités par l’API ; favoris et comparateur restent locaux à ce navigateur.</p>
           <p>Les visuels utilisés proviennent d’un design study placé sous licence MIT ; voir LICENSE.</p>
-          <a className="btn btn-ghost" href="#/contact">Revenir au contact</a>
+          <a className="btn btn-ghost" href="/contact">Revenir au contact</a>
         </aside>
       </div>
     </div>

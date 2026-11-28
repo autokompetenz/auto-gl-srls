@@ -39,7 +39,7 @@ export default function Favorites({ favorites, compare }: { favorites: Favorites
           <Heart size={32} aria-hidden="true" />
           <h2>Aucun favori pour le moment.</h2>
           <p>Parcourez le catalogue et appuyez sur le cœur d’un véhicule pour le retrouver ici.</p>
-          <a className="btn btn-primary" href="#/catalogue">Découvrir le catalogue</a>
+          <a className="btn btn-primary" href="/catalogue">Découvrir le catalogue</a>
         </div>
       )}
     </div>

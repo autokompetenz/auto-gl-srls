@@ -34,7 +34,7 @@ test('le mail client confirme la commande avec le véhicule, le montant et le su
   assert.match(mail.text, /AUTO GL Studio Silver · Série 01/)
   assert.match(mail.text, /27\s?900\s?€/)
   assert.match(mail.text, /IBAN : IT60X0542811101000000123456/)
-  assert.match(mail.text, /#\/suivi\/AGL-20261125-ABC123/)
+  assert.match(mail.text, /\/suivi\/AGL-20261125-ABC123/)
   assert.doesNotMatch(mail.text, /<[a-z]+>/i)
 })
 
@@ -49,7 +49,7 @@ test('le mail admin notifie la nouvelle commande au destinataire configuré', ()
     assert.match(mail.text, /Marie Dupont/)
     assert.match(mail.text, /marie@example.test/)
     assert.match(mail.text, /Livraison le matin/)
-    assert.match(mail.text, /#\/admin\/commandes/)
+    assert.match(mail.text, /\/admin\/commandes/)
   } finally {
     if (previous === undefined) delete process.env.LEADS_EMAIL
     else process.env.LEADS_EMAIL = previous

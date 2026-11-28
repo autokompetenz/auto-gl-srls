@@ -32,7 +32,7 @@ export default function CompareBar({ compare, hidden }: { compare: Compare; hidd
         </ul>
         <div className="compare-bar-actions">
           <button type="button" className="compare-clear" onClick={compare.clear}>Vider</button>
-          <a className="btn btn-primary" href="#/comparateur">
+          <a className="btn btn-primary" href="/comparateur">
             Comparer <ArrowRight size={16} aria-hidden="true" />
           </a>
         </div>

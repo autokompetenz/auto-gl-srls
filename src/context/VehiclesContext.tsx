@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import type { ReactNode } from 'react'
 import { vehicles as fallbackVehicles } from '../data/vehicles'
 import { apiFetch } from '../lib/api'
+import { routeChangeEvent } from '../hooks/useRoute'
 import type { VehicleDTO } from '../types/features'
 
 type VehicleSource = 'api' | 'fallback'
@@ -74,14 +75,18 @@ export function VehiclesProvider({ children }: { children: ReactNode }) {
     }
   }, [load])
 
-  // Le site est une SPA à hash : sans cela, un retour depuis l'admin garderait
-  // l'ancienne liste en mémoire et masquerait les véhicules ajoutés.
+  // Le site est une SPA avec des URL propres : sans cela, un retour depuis
+  // l'admin garderait l'ancienne liste en mémoire et masquerait les véhicules ajoutés.
   useEffect(() => {
     const refresh = () => {
       void load(true)
     }
-    window.addEventListener('hashchange', refresh)
-    return () => window.removeEventListener('hashchange', refresh)
+    window.addEventListener('popstate', refresh)
+    window.addEventListener(routeChangeEvent, refresh)
+    return () => {
+      window.removeEventListener('popstate', refresh)
+      window.removeEventListener(routeChangeEvent, refresh)
+    }
   }, [load])
 
   const value = useMemo<VehiclesContextValue>(() => ({

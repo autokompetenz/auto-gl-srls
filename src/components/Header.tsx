@@ -3,20 +3,20 @@ import { Heart, Menu, X } from 'lucide-react'
 import type { Route } from '../hooks/useRoute'
 
 const links = [
-  { href: '#/', label: 'Accueil', page: 'home' },
-  { href: '#/catalogue', label: 'Catalogue', page: 'catalogue' },
-  { href: '#/comparateur', label: 'Comparateur', page: 'compare' },
-  { href: '#/simulation', label: 'Simulation', page: 'simulation' },
-  { href: '#/suivi', label: 'Suivi', page: 'tracking' },
-  { href: '#/favoris', label: 'Favoris', page: 'favorites' },
-  { href: '#/contact', label: 'Contact', page: 'contact' },
+  { href: '/', label: 'Accueil', page: 'home' },
+  { href: '/catalogue', label: 'Catalogue', page: 'catalogue' },
+  { href: '/comparateur', label: 'Comparateur', page: 'compare' },
+  { href: '/simulation', label: 'Simulation', page: 'simulation' },
+  { href: '/suivi', label: 'Suivi', page: 'tracking' },
+  { href: '/favoris', label: 'Favoris', page: 'favorites' },
+  { href: '/contact', label: 'Contact', page: 'contact' },
 ] as const
 
 export default function Header({ route, favoritesCount, compareCount }: { route: Route; favoritesCount: number; compareCount: number }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const isActive = (page: (typeof links)[number]['page']) => route.page === page
 
-  // Le menu mobile se referme dès que la route change (navigation par hash).
+  // Le menu mobile se referme dès que la route change.
   useEffect(() => setMenuOpen(false), [route])
 
   const close = () => setMenuOpen(false)
@@ -24,7 +24,7 @@ export default function Header({ route, favoritesCount, compareCount }: { route:
   return (
     <header className={menuOpen ? 'site-header nav-open' : 'site-header'}>
       <div className="shell header-inner">
-        <a className="wordmark" href="#/" aria-label="AUTO GL SRLS — accueil" onClick={close}>
+        <a className="wordmark" href="/" aria-label="AUTO GL SRLS — accueil" onClick={close}>
           AUTO GL{' '}<span className="wordmark-suffix">SRLS</span>
         </a>
         <nav id="main-navigation" className="main-nav" aria-label="Navigation principale">
@@ -43,13 +43,13 @@ export default function Header({ route, favoritesCount, compareCount }: { route:
         <div className="header-counters">
           <a
             className="compare-counter"
-            href="#/comparateur"
+            href="/comparateur"
             aria-label={`${compareCount} véhicule${compareCount > 1 ? 's' : ''} à comparer`}
           >
             <span aria-hidden="true">⇄</span>
             <span>{compareCount}</span>
           </a>
-          <a className="favorites-counter" href="#/favoris" aria-label={`${favoritesCount} véhicule${favoritesCount > 1 ? 's' : ''} en favoris`}>
+          <a className="favorites-counter" href="/favoris" aria-label={`${favoritesCount} véhicule${favoritesCount > 1 ? 's' : ''} en favoris`}>
             <Heart size={17} aria-hidden="true" />
             <span>{favoritesCount}</span>
           </a>

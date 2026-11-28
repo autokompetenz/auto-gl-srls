@@ -122,7 +122,7 @@ export function orderCustomerMail(order, { statusChanged = false, note } = {}) {
 
   lines.push(
     '',
-    `Suivre la commande : ${appLink(`/#/suivi/${encodeURIComponent(order.orderNumber)}`)}`,
+    `Suivre la commande : ${appLink(`/suivi/${encodeURIComponent(order.orderNumber)}`)}`,
     '',
     'Une question ? Répondez à cet e-mail ou écrivez à contatto@autoglsrls.com.',
     '',
@@ -164,8 +164,8 @@ export function orderAdminMail(order) {
 
   lines.push(
     '',
-    `Dossier admin : ${appLink('/#/admin/commandes')}`,
-    `Suivi client : ${appLink(`/#/suivi/${encodeURIComponent(order.orderNumber)}`)}`,
+    `Dossier admin : ${appLink('/admin/commandes')}`,
+    `Suivi client : ${appLink(`/suivi/${encodeURIComponent(order.orderNumber)}`)}`,
   )
 
   return {
@@ -203,9 +203,7 @@ export async function sendLeadMail(lead) {
 }
 
 export async function sendAlertNotification({ to, name, car }) {
-  const link = process.env.APP_URL
-    ? `${process.env.APP_URL.replace(/\/$/, '')}/#/vehicule/${encodeURIComponent(car.id)}`
-    : `#/vehicule/${encodeURIComponent(car.id)}`
+  const link = appLink(`/vehicule/${encodeURIComponent(car.id)}`)
   return sendMail({
     to,
     subject: `AUTO GL SRLS — une annonce correspond à votre alerte`,
